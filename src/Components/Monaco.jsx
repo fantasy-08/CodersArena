@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import Alert from './Alert';
 import OutputTable from './OutputTable';
+import { store } from "react-notifications-component";
 
 const initial_state = {
 	lang: "cpp",
@@ -28,16 +29,17 @@ const initial_output = {
 	Msg:""
 };
 
-function Monaco({ sampleInput, qID, testCaseSize }) {
+function Monaco({ sampleInput, qID, testCaseSize, sendMessage }) {
 	const [property, setProperty] = useState(initial_state);
 	const [compile, setCompile] = useState("");
 	const [exp, setExp] = useState(false);
 	const [output, setOutput] = useState(initial_output);
 	const [isTemp, setIsTemp] = useState(true);
 	const [program, setProgram] = useState(template[property.lang]);
-	const [change,setChange]=useState(0)
+	const [change, setChange] = useState(0);
 	const handleCompileSubmit = () => {
 		setIsTemp(true);
+		sendMessage("Opponent Compiled the code")
 		setOutput((prev) => {
 			return {
 				data: "Compiling...",
@@ -87,15 +89,51 @@ function Monaco({ sampleInput, qID, testCaseSize }) {
 	};
 	const handleCheckSubmit = () => {
 		setIsTemp(false);
+		store.addNotification({
+			title: `Code Submit`,
+			message: `Checking the code`,
+			type: `info`,
+			insert: "top",
+			container: "top-left",
+			animationIn: ["animate__animated", "animate__fadeIn"],
+			animationOut: ["animate__animated", "animate__fadeOut"],
+			dismiss: {
+				duration: 500,
+				showIcon: true,
+			},
+		});
 		setOutput((prev) => {
 			return {
 				...prev,
 				present: true,
 			};
 		});
-		setChange(prev=>{return prev+1});
+		setChange((prev) => {
+			return prev + 1;
+		});
 	};
-
+	useEffect(() => {
+		if (output === initial_output) return null;
+		if(isTemp===false)return null;
+		console.log(output.Short);
+		store.addNotification({
+			title: `${output.Short}`,
+			message: `${output.Msg}.`,
+			type: `${
+				output.Short === "warning" || output.Short === "success"
+					? output.Short
+					: "danger"
+			}`,
+			insert: "top",
+			container: "top-left",
+			animationIn: ["animate__animated", "animate__fadeIn"],
+			animationOut: ["animate__animated", "animate__fadeOut"],
+			dismiss: {
+				duration: 500,
+				showIcon:true,
+			},
+		});
+	}, [output])
 	//component Did Mount
 	useEffect(() => {
 		setProperty(initial_state);

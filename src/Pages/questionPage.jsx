@@ -7,6 +7,8 @@ import Constrain from '../Components/Constrain';
 import TableTestCase from '../Components/TableTestCase';
 import Monaco from '../Components/Monaco';
 import Loading from '../Components/Loading';
+import useChat from "../Components/Socket";
+import { store } from "react-notifications-component";
 
 const initial_state = {
 	title: "",
@@ -20,23 +22,54 @@ const initial_state = {
 	outputF: "",
 };
 
-function QuestionPage({qID}) {
-    const [question, setQuestion] = useState(initial_state);
-	const [error,setError]=useState("");
-    useEffect(() => {
-		const getQuestion=async (qID)=>{
-			const response = await fetch(
-				`api/question/${qID}`
-			);
-			const data=await response.json();
-			if(data.error)
-				setError(data.error)
-			else
-				setQuestion(data)
-		}
+function QuestionPage({ qID, joinID }) {
+	const [question, setQuestion] = useState(initial_state);
+	const { messages, sendMessage } = useChat(joinID);
+
+	useEffect(() => {
+		const getQuestion = async (qID) => {
+			const response = await fetch(`api/question/${qID}`);
+			const data = await response.json();
+			if (data.error){
+				store.addNotification({
+					title: "API Error",
+					message: data.error,
+					type: "default",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 4000,
+						onScreen: true,
+					},
+				});
+			}
+			else setQuestion(data);
+		};
 		getQuestion(qID);
-    }, [])
-    return (
+	}, []);
+
+	useEffect(() => {
+		if(messages.length===0)
+			return null;
+		if(messages[0].ownedByCurrentUser)
+			return null;
+		store.addNotification({
+			title: "Compilation Alert",
+			message: messages[0].body,
+			type: "default",
+			insert: "top",
+			container: "top-right",
+			animationIn: ["animate__animated", "animate__fadeIn"],
+			animationOut: ["animate__animated", "animate__fadeOut"],
+			dismiss: {
+				duration: 4000,
+				onScreen: true,
+			},
+		});
+	}, [messages])
+	return (
 		<>
 			{question !== initial_state ? (
 				<Container>
@@ -53,6 +86,7 @@ function QuestionPage({qID}) {
 						sampleInput={question.sampleInput}
 						qID={qID}
 						testCaseSize={question.testCaseSize}
+						sendMessage={sendMessage}
 					/>
 				</Container>
 			) : (
@@ -60,6 +94,20 @@ function QuestionPage({qID}) {
 					<Loading />
 				</>
 			)}
+
+			<div className="messages-container">
+				<ol className="messages-list">
+					{messages.map((message, i) => (
+						!message.ownedByCurrentUser?
+						<li key={i}>
+							{message.body}
+						</li>:
+						<></>
+						))
+					}
+				</ol>
+			</div>
+			
 		</>
 	);
 }

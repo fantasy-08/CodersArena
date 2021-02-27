@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -25,8 +25,7 @@ export default function QuestionBox() {
 	const classes = useStyles();
 	const { state } = useContext(InfoContext);
 	const history=useHistory();
-
-	React.useEffect(()=>{
+	useEffect(()=>{
 		var createdOn=state.createdOn;
 		var start_date=Date.parse(createdOn);
 		var today_date=Date.now();
@@ -36,8 +35,8 @@ export default function QuestionBox() {
 		if(min>32){
 			history.push('/expired')
 		}
-
 	},[])
+
 	return (
 		<div className={classes.root}>
 			<Grid
@@ -49,7 +48,7 @@ export default function QuestionBox() {
 			>
 				<Grid item xs={12}>
 					<Paper className={classes.paper}>
-						<QuestionPage qID={state.qID} />
+						<QuestionPage qID={state.qID} joinID={state.joinID} />
 					</Paper>
 				</Grid>
 			</Grid>
