@@ -1,17 +1,20 @@
 import React from 'react'
 import Alert from "./Alert";
 import DisplayCase from './DisplayCase';
-
-function OutputTable({ qID, testCaseSize, code, prog, CompilerArgs }) {
-	const [state, setState] = React.useState({
-		ac: 0,
-		re: 0,
-		wa: 0,
-	});
+const initial_state = {
+	ac: 0,
+	re: 0,
+	wa: 0,
+};
+function OutputTable({ qID, testCaseSize, code, prog, CompilerArgs,change }) {
+	const [state, setState] = React.useState(initial_state);
 	const [casestatus,setCasestatus]=React.useState([])
 
 
 	React.useEffect(() => {
+		setState(initial_state)
+		setCasestatus([])
+		
         const temp = [];
 		for (var i = 0; i < testCaseSize; i++) {
 			temp.push(i);
@@ -30,7 +33,7 @@ function OutputTable({ qID, testCaseSize, code, prog, CompilerArgs }) {
 			}else{
 			        const getAnswer = async (k) => {
 						const parameter = {
-							LanguageChoice: code,
+							LanguageChoice: `${code}`,
 							Program: prog,
 							CompilerArgs,
 						};
@@ -81,7 +84,7 @@ function OutputTable({ qID, testCaseSize, code, prog, CompilerArgs }) {
 				}
 
 		},2000)
-	}, []);
+	}, [change]);
 
 	return (
 		<>

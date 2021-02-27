@@ -35,6 +35,7 @@ function Monaco({ sampleInput, qID, testCaseSize }) {
 	const [output, setOutput] = useState(initial_output);
 	const [isTemp, setIsTemp] = useState(true);
 	const [program, setProgram] = useState(template[property.lang]);
+	const [change,setChange]=useState(0)
 	const handleCompileSubmit = () => {
 		setIsTemp(true);
 		setOutput((prev) => {
@@ -92,6 +93,7 @@ function Monaco({ sampleInput, qID, testCaseSize }) {
 				present: true,
 			};
 		});
+		setChange(prev=>{return prev+1});
 	};
 
 	//component Did Mount
@@ -191,6 +193,7 @@ function Monaco({ sampleInput, qID, testCaseSize }) {
 							code={property.code}
 							prog={program}
 							CompilerArgs={compilerArg_exp[property.lang]}
+							change={change}
 						/>
 					</>
 				)}

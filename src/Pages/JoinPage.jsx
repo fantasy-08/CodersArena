@@ -8,6 +8,9 @@ import SportsKabaddiIcon from "@material-ui/icons/SportsKabaddi";
 import LoopIcon from "@material-ui/icons/Loop";
 import {InfoContext} from '../App';
 import { v4 as uuidv4 } from 'uuid';
+import { useHistory } from "react-router-dom";
+import Dialog from '../Components/Dialog';
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -28,10 +31,12 @@ const useStyles = makeStyles((theme) => ({
 function JoinPage() {
 	const { state, dispatch } = useContext(InfoContext);
     const classes = useStyles();
+	const history = useHistory();
+
     const handleFight=(e)=>{
         if(state.qID==="")
         {
-			const uniID = uuidv4(); //generated to ID!
+			const uniID = '123'//uuidv4(); //generated to ID!
             const getFight=async ()=>{
                 const req = await fetch(`api/user/${uniID}`,{
                     method:"POST"
@@ -39,11 +44,11 @@ function JoinPage() {
                 const data=await req.json();
                 console.log(data)
                 if(data.user){
-                    console.log(data.user.question._id);
+                    console.log(data.user.question);
 					dispatch({
-						type: "ADD_INFO",
+						type: "FOUND_INFO",
 						payload: {
-							qID: data.user.question._id,
+							qID: data.user.question,
 							createdOn: data.user.createdOn,
 							joinID: uniID,
 						},
@@ -56,29 +61,30 @@ function JoinPage() {
 			});
             getFight();
         }
-        else
+        else if(state.ok)
         {
-            //start fight
-			console.log(state);
+            //start fight			
+			history.push('/fight');
         }
     }
     return (
 		<div className={classes.root}>
 			<Container>
-				<Grid container spacing={0}>
-					<Grid item xs={12}>
+				<Grid container>
+					<Grid item sm={12}>
 						<Paper className={classes.paper}>
-							<Grid container spacing={7}>
-								<Grid item xs={3}>
+							<Grid container spacing={10}>
+								<Grid item md={2}>
 									<img
 										src="https://static-fastly.hackerearth.com/static/fight_club/images/logo.svg"
 										alt=""
 										srcset=""
 										width="154"
 										height="154"
+										style={{ paddingLeft: "1em" }}
 									/>
 								</Grid>
-								<Grid item xs={9}>
+								<Grid item xs={10}>
 									<Grid container direction="column">
 										<Grid item xs={12}>
 											<Typography
@@ -88,20 +94,14 @@ function JoinPage() {
 												BoringCoder
 											</Typography>
 										</Grid>
-										<Grid item xs={6}>
-											<Grid container spacing={10}>
-												<Grid item xs={6}>
-													<Typography
-														variant="h6"
-														gutterBottom
-													>
-														Where coders fight!
-													</Typography>
-												</Grid>
-												<Grid item xs={6}>
+										<Grid item xs={12}>
+											<Grid container spacing={3}>
+												<Grid item md={2}>
 													<Button
+														fullWidth
 														variant="contained"
 														color="primary"
+														// size="small"
 														onClick={handleFight}
 														className={
 															classes.button
@@ -117,10 +117,39 @@ function JoinPage() {
 													>
 														{state.qID === "" ||
 														state.qID === "finding"
-															? "Find "
+															? "New "
 															: "Start "}
 														Fight
 													</Button>
+												</Grid>
+												<Grid item md={2}>
+													<Dialog />
+												</Grid>
+												<Grid item md={2}>
+													<Typography
+														variant="h6"
+														gutterBottom
+													>
+														{state.joinID ? (
+															<VpnKeyIcon
+																style={{
+																	fontSize:
+																		"2em",
+																}}
+																color="primary"
+															/>
+														) : (
+															<></>
+														)}
+													</Typography>
+												</Grid>
+												<Grid item md={6}>
+													<Typography
+														variant="h6"
+														gutterBottom
+													>
+														{state.joinID}
+													</Typography>
 												</Grid>
 											</Grid>
 										</Grid>

@@ -25,7 +25,15 @@ const reducer=(state,action)=>{
 				...state,
 				qID: action.payload.qID,
 				createdOn: action.payload.createdOn,
-				joinID: action.payload.joinID
+				joinID: action.payload.joinID,
+			};
+		case "FOUND_INFO":
+			return {
+				...state,
+				qID: action.payload.qID,
+				createdOn: action.payload.createdOn,
+				joinID: action.payload.joinID,
+				ok:true
 			};
 		default:
 			return state;

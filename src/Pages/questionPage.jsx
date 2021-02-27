@@ -1,6 +1,5 @@
 import React,{useState,useEffect} from 'react'
 import Container from "@material-ui/core/Container";
-import {ques1} from '../dummydata/ques';
 import QuestionHeader from '../Components/QuestionHeader';
 import QuestionBody from "../Components/QuestionBody";
 import IOdata from '../Components/IOdata';
