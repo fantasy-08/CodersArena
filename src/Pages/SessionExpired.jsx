@@ -25,6 +25,15 @@ function SessionExpired() {
 					joinID: "",
 				},
 			});
+			dispatch({
+				type: "ADD_POINTS",
+				payload:0
+			});
+			dispatch({
+				type: "ADD_WON",
+				payload: "",
+			});
+
 			setTimeout(() => {
 				history.push("/");
 			}, 3000);
@@ -50,6 +59,10 @@ function SessionExpired() {
 			</Typography>
 			<Typography variant="body" gutterBottom>
 				{text}
+			</Typography>
+			<br/>
+			<Typography variant="body" gutterBottom>
+				{text === "removing" ? <></> : "Redirection to home-page"}
 			</Typography>
 		</div>
 	);

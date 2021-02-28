@@ -7,7 +7,7 @@ const SOCKET_SERVER_URL = "http://localhost:5000";
 const useChat = (roomId) => {
 	const [messages, setMessages] = useState([]); // Sent and received messages
 	const socketRef = useRef();
-
+	
 	useEffect(() => {
 		// Creates a WebSocket connection
 		socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
@@ -28,7 +28,14 @@ const useChat = (roomId) => {
 			socketRef.current.disconnect();
 		};
 	}, [roomId]);
-
+	// useEffect(()=>{
+	// 	if(exit)
+	// 		return () => {
+	// 			socketRef.current.disconnect();
+	// 		};
+	// 	else
+	// 		return null;
+	// },[exit])
 	// Sends a message to the server that
 	// forwards it to all users in the same room
 	const sendMessage = (messageBody) => {

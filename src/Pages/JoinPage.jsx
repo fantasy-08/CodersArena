@@ -36,7 +36,7 @@ function JoinPage() {
     const handleFight=(e)=>{
         if(state.qID==="")
         {
-			const uniID = '123'//uuidv4(); //generated to ID!
+			const uniID = 123// uuidv4(); //generated to ID! //123 for testing!
             const getFight=async ()=>{
                 const req = await fetch(`api/user/${uniID}`,{
                     method:"POST"

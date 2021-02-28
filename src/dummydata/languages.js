@@ -10,12 +10,12 @@ const langOp = [
 ];
 
 const template = {
-	"cpp": `/******************************************************************************
+	cpp: `/******************************************************************************
 Welcome to Boring Coder.
 Hello Friends coding kar lo!
 *******************************************************************************/
 
-#include <stdio.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main()

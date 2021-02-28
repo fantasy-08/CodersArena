@@ -5,6 +5,7 @@ import {reducer} from './Reducer/info';
 import { BrowserRouter as Router,  Route } from "react-router-dom";
 import PrivateRoute from './Components/PrivateRoute';
 import SessionExpired from './Pages/SessionExpired';
+import EndTest from './Pages/EndFight';
 import NavBar from "./Components/Navbar";
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
@@ -12,7 +13,9 @@ import "react-notifications-component/dist/theme.css";
 const initialState={
   name:"",
   qID:"",
-  joinID:""
+  joinID:"",
+  points:0,
+  won:""
 }
 
 export const InfoContext = createContext();
@@ -24,13 +27,16 @@ function App() {
 		<InfoContext.Provider value={{ state, dispatch }}>
 			<Router>
 				<>
-          <ReactNotification/>
-          <NavBar/>
+					<ReactNotification />
+					<NavBar />
 					<Route exact path="/" component={JoinPage} />
-          <PrivateRoute exact path='/fight'>
-            <QuestionBox/>
-          </PrivateRoute>
-          <Route exact path="/expired" component={SessionExpired}/>
+					<PrivateRoute exact path="/fight">
+						<QuestionBox />
+					</PrivateRoute>
+					<PrivateRoute exact path="/end">
+						<EndTest />
+					</PrivateRoute>
+					<Route exact path="/expired" component={SessionExpired} />
 				</>
 			</Router>
 		</InfoContext.Provider>

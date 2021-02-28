@@ -78,7 +78,7 @@ export default function CustomizedDialogs() {
     const [joinID,setJoinID]=React.useState('')
     const [data,setData]=React.useState();
     const [isPresent,setIsPresent]=React.useState("");
-	const { state, dispatch } = React.useContext(InfoContext);
+	const { dispatch } = React.useContext(InfoContext);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -95,6 +95,7 @@ export default function CustomizedDialogs() {
 				joinID: data.user.joiningID,
 			},
 		});
+		setJoinID('');
         handleClose();
     }
 

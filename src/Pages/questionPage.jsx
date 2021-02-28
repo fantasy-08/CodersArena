@@ -1,14 +1,16 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect, useContext } from "react";
 import Container from "@material-ui/core/Container";
-import QuestionHeader from '../Components/QuestionHeader';
+import QuestionHeader from "../Components/QuestionHeader";
 import QuestionBody from "../Components/QuestionBody";
-import IOdata from '../Components/IOdata';
-import Constrain from '../Components/Constrain';
-import TableTestCase from '../Components/TableTestCase';
-import Monaco from '../Components/Monaco';
-import Loading from '../Components/Loading';
+import IOdata from "../Components/IOdata";
+import Constrain from "../Components/Constrain";
+import TableTestCase from "../Components/TableTestCase";
+import Monaco from "../Components/Monaco";
+import Loading from "../Components/Loading";
 import useChat from "../Components/Socket";
 import { store } from "react-notifications-component";
+import { useHistory } from "react-router-dom";
+import { InfoContext } from "../App";
 
 const initial_state = {
 	title: "",
@@ -25,12 +27,13 @@ const initial_state = {
 function QuestionPage({ qID, joinID }) {
 	const [question, setQuestion] = useState(initial_state);
 	const { messages, sendMessage } = useChat(joinID);
-
+	const history = useHistory();
+	const { state, dispatch } = useContext(InfoContext);
 	useEffect(() => {
 		const getQuestion = async (qID) => {
 			const response = await fetch(`api/question/${qID}`);
 			const data = await response.json();
-			if (data.error){
+			if (data.error) {
 				store.addNotification({
 					title: "API Error",
 					message: data.error,
@@ -44,17 +47,26 @@ function QuestionPage({ qID, joinID }) {
 						onScreen: true,
 					},
 				});
-			}
-			else setQuestion(data);
+			} else setQuestion(data);
 		};
 		getQuestion(qID);
 	}, []);
 
 	useEffect(() => {
-		if(messages.length===0)
-			return null;
-		if(messages[0].ownedByCurrentUser)
-			return null;
+		if (messages.length === 0) return null;
+		if (
+			messages[0].ownedByCurrentUser &&
+			messages[0].body === "fight over"
+		) {
+			dispatch({ type: "ADD_WON", payload: "won" });
+			history.push("/end");
+		}
+
+		if (messages[0].ownedByCurrentUser) return null;
+		if (messages[0].body === "fight over") {
+			dispatch({ type: "ADD_WON", payload: "lost" });
+			history.push("/end");
+		}
 		store.addNotification({
 			title: "Compilation Alert",
 			message: messages[0].body,
@@ -68,7 +80,7 @@ function QuestionPage({ qID, joinID }) {
 				onScreen: true,
 			},
 		});
-	}, [messages])
+	}, [messages]);
 	return (
 		<>
 			{question !== initial_state ? (
@@ -95,7 +107,8 @@ function QuestionPage({ qID, joinID }) {
 				</>
 			)}
 
-			<div className="messages-container">
+			{
+			/* <div className="messages-container">
 				<ol className="messages-list">
 					{messages.map((message, i) => (
 						!message.ownedByCurrentUser?
@@ -106,10 +119,10 @@ function QuestionPage({ qID, joinID }) {
 						))
 					}
 				</ol>
-			</div>
-			
+			</div> */
+			}
 		</>
 	);
 }
 
-export default QuestionPage
+export default QuestionPage;

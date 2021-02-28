@@ -14,6 +14,7 @@ import {useHistory} from 'react-router-dom';
 import CodeIcon from "@material-ui/icons/Code";
 import TimerIcon from "@material-ui/icons/Timer";
 import Timer from "react-compound-timer";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 
 const useStyles = makeStyles((theme) => ({
 	grow: {
@@ -117,16 +118,8 @@ export default function PrimarySearchAppBar() {
 		setMobileMoreAnchorEl(event.currentTarget);
 	};
     const handleEndTest=()=>{
-        dispatch({
-            type: "ADD_INFO",
-            payload: {
-                qID: "",
-                createdOn: "",
-                joinID: "",
-            },
-        });
-        setTime(false)
-        history.push('/')
+        setTime(false);
+        history.push("/end");
     }
 	const menuId = "primary-search-account-menu";
 	const renderMenu = (
@@ -159,6 +152,7 @@ export default function PrimarySearchAppBar() {
 				<IconButton
 					aria-label="show 11 new notifications"
 					color="inherit"
+					onClick={handleEndTest}
 				>
 					<ExitToAppIcon />
 				</IconButton>
@@ -179,7 +173,10 @@ export default function PrimarySearchAppBar() {
 	);
 
     React.useEffect(()=>{
-        if(state.createdOn==="") return null;
+        if(state.createdOn===""){
+			setTime(false);
+			return null;
+		}
 
         var T=state.createdOn;
         var t1=Date.parse(T);
@@ -226,6 +223,21 @@ export default function PrimarySearchAppBar() {
 					</div>
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
+						<>
+						{
+							state.points?
+							<>
+								<h4>{state.points}</h4>
+								<IconButton
+									aria-label="show 17 new notifications"
+									color="inherit"
+								>
+									<MonetizationOnIcon />
+								</IconButton>
+							</>:
+							<></>
+						}								
+						</>
 						{state.joinID !== "" && state.joinID !== "finding" ? (
 							<IconButton
 								aria-label="show 17 new notifications"

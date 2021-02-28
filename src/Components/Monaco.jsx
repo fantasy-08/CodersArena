@@ -102,6 +102,7 @@ function Monaco({ sampleInput, qID, testCaseSize, sendMessage }) {
 				showIcon: true,
 			},
 		});
+		sendMessage("Opponent tried to submit the code");
 		setOutput((prev) => {
 			return {
 				...prev,
@@ -232,6 +233,7 @@ function Monaco({ sampleInput, qID, testCaseSize, sendMessage }) {
 							prog={program}
 							CompilerArgs={compilerArg_exp[property.lang]}
 							change={change}
+							sendMessage={sendMessage}
 						/>
 					</>
 				)}

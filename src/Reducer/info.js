@@ -33,7 +33,18 @@ const reducer=(state,action)=>{
 				qID: action.payload.qID,
 				createdOn: action.payload.createdOn,
 				joinID: action.payload.joinID,
-				ok:true
+				ok: true,
+			};
+		case "ADD_POINTS":
+			return {
+				...state,
+				points: action.payload,
+			};
+
+		case "ADD_WON":
+			return {
+				...state,
+				won: action.payload,
 			};
 		default:
 			return state;
