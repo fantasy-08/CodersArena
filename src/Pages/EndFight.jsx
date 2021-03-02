@@ -11,6 +11,21 @@ function EndFight() {
     const { state,dispatch } = useContext(InfoContext);
 
 	React.useEffect(() => {
+		if(state.won==='won')
+		{
+			dispatch({type:"ADD_WON1"});
+			const getIncFight = async () => {
+				const req = await fetch(`/won`, {
+					method: "PUT",
+					headers: {
+						authorization: `Bearer ${state.token}`,
+					},
+				});
+				const data = await req.json();
+			};
+			getIncFight();
+			return null;
+		}
 		if(state.won==="won" || state.won==="lost")
 			return null;
 		const id=setInterval(()=>{
