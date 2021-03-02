@@ -5,6 +5,7 @@ import OptionTheme from "./OptionTheme";
 import { template, compilerArg_exp } from "../dummydata/languages";
 import ButtonC from './Button';
 import { CopyBlock, nord } from "react-code-blocks";
+import { InfoContext } from "../App";
 import {
 	Checkbox,
 	FormGroup,
@@ -37,9 +38,11 @@ function Monaco({ sampleInput, qID, testCaseSize, sendMessage }) {
 	const [isTemp, setIsTemp] = useState(true);
 	const [program, setProgram] = useState(template[property.lang]);
 	const [change, setChange] = useState(0);
+	const { state } = React.useContext(InfoContext);
+
 	const handleCompileSubmit = () => {
 		setIsTemp(true);
-		sendMessage("Opponent Compiled the code")
+		sendMessage(`${state.user.name} Compiled the code`)
 		setOutput((prev) => {
 			return {
 				data: "Compiling...",
@@ -56,11 +59,12 @@ function Monaco({ sampleInput, qID, testCaseSize, sendMessage }) {
 				CompilerArgs: compilerArg_exp[data.lang],
 			};
 
-			const request = await fetch("api/compile", {
+			const request = await fetch("/api/compile", {
 				method: "POST",
 				headers: {
 					Accept: "application/json",
 					"Content-Type": "application/json",
+					authorization:`Bearer ${state.token}`
 				},
 				body: JSON.stringify(parameter),
 				redirect: "follow",
@@ -102,7 +106,7 @@ function Monaco({ sampleInput, qID, testCaseSize, sendMessage }) {
 				showIcon: true,
 			},
 		});
-		sendMessage("Opponent tried to submit the code");
+		sendMessage(`${state.user.name} tried to submit the code`);
 		setOutput((prev) => {
 			return {
 				...prev,

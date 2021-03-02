@@ -11,7 +11,7 @@ function TestCase({ qID, testCaseSize, code, prog, CompilerArgs ,no,setState}) {
 				Program: prog,
 				CompilerArgs
 			};
-            const request = await fetch(`api/result/${qID}/${no}`, {
+            const request = await fetch(`/api/result/${qID}/${no}`, {
 				method: "POST",
 				headers: {
 					Accept: "application/json",

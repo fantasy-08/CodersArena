@@ -31,7 +31,7 @@ function QuestionPage({ qID, joinID }) {
 	const { state, dispatch } = useContext(InfoContext);
 	useEffect(() => {
 		const getQuestion = async (qID) => {
-			const response = await fetch(`api/question/${qID}`);
+			const response = await fetch(`/api/question/${qID}`);
 			const data = await response.json();
 			if (data.error) {
 				store.addNotification({

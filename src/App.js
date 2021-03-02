@@ -15,7 +15,9 @@ const initialState={
   qID:"",
   joinID:"",
   points:0,
-  won:""
+  won:"",
+  user:"",
+  token:""
 }
 
 export const InfoContext = createContext();
@@ -23,6 +25,15 @@ export const InfoContext = createContext();
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  React.useEffect(()=>{
+	const data = localStorage.getItem("userData");
+	if(!data)return null;
+	const val=JSON.parse(data)
+	dispatch({
+		type: "ADD_USER",
+		payload: { token: val.token, user: val.user },
+	});	
+  },[])
   return (
 		<InfoContext.Provider value={{ state, dispatch }}>
 			<Router>

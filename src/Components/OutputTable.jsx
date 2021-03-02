@@ -62,11 +62,12 @@ function OutputTable({
 						Program: prog,
 						CompilerArgs,
 					};
-					const request = await fetch(`api/result/${qID}/${k}`, {
+					const request = await fetch(`/api/result/${qID}/${k}`, {
 						method: "POST",
 						headers: {
 							Accept: "application/json",
 							"Content-Type": "application/json",
+							authorization: `Bearer ${PapaState.state.token}`,
 						},
 						body: JSON.stringify(parameter),
 					});

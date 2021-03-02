@@ -10,7 +10,7 @@ function SessionExpired() {
     const { state,dispatch } = React.useContext(InfoContext);
     React.useEffect(()=>{
         const delreq=async()=>{
-            const req = await fetch(`api/user/${state.joinID}`, {
+            const req = await fetch(`/api/user/${state.joinID}`, {
 				method: "DELETE",
 			});
             const data=await req.json();
@@ -33,12 +33,13 @@ function SessionExpired() {
 				type: "ADD_WON",
 				payload: "",
 			});
-
-			setTimeout(() => {
-				history.push("/");
-			}, 3000);
         }
-        delreq();
+		delreq();
+		
+
+		setTimeout(() => {
+			history.push("/");
+		}, 3000);
     },[])
     return (
 		<div

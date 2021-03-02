@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useHistory } from "react-router-dom";
 import Dialog from '../Components/Dialog';
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import logo from "../fight.svg";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -36,9 +37,9 @@ function JoinPage() {
     const handleFight=(e)=>{
         if(state.qID==="")
         {
-			const uniID = 123// uuidv4(); //generated to ID! //123 for testing!
+			const uniID =  uuidv4(); //generated to ID! //123 for testing!
             const getFight=async ()=>{
-                const req = await fetch(`api/user/${uniID}`,{
+                const req = await fetch(`/api/user/${uniID}`,{
                     method:"POST"
                 });
                 const data=await req.json();
@@ -63,7 +64,18 @@ function JoinPage() {
         }
         else if(state.ok)
         {
-            //start fight			
+            //start fight		
+			const getIncFight = async () => {
+				const req = await fetch(`/play`, {
+					method: "PUT",
+					headers: {
+						authorization: `Bearer ${state.token}`,
+					},
+				});
+				const data=await req.json();
+				dispatch({ type: "ADD_PLAY" });
+			};
+			getIncFight();
 			history.push('/fight');
         }
     }
@@ -87,12 +99,63 @@ function JoinPage() {
 								<Grid item xs={10}>
 									<Grid container direction="column">
 										<Grid item xs={12}>
-											<Typography
-												variant="h2"
-												gutterBottom
-											>
-												BoringCoder
-											</Typography>
+											<Grid container>
+												<Grid item md={6}>
+													<Typography
+														variant="h2"
+														gutterBottom
+													>
+														BoringCoder
+													</Typography>
+												</Grid>
+												<Grid item md={6}>
+													{state.user !== "" ? (
+														<Typography
+															variant="h4"
+															gutterBottom
+															style={{
+																paddingTop:
+																	"1.5rem",
+															}}
+														>
+															<img
+																src={logo}
+																alt="Fights won"
+																srcset=""
+																width="50em"
+																height="30em"
+															/>
+															<span
+																style={{
+																	color:
+																		"orange",
+																}}
+															>
+																{
+																	state.user
+																		.fightWon
+																}
+															</span>
+															/
+															{
+																state.user
+																	.fightFought
+															}
+															<span
+																style={{
+																	color:
+																		"orange",
+																}}
+															>
+																Fights
+															</span>
+															Won
+														</Typography>
+													) : (
+														<></>
+													)}
+												</Grid>
+											</Grid>
 										</Grid>
 										<Grid item xs={12}>
 											<Grid container spacing={3}>
@@ -101,7 +164,11 @@ function JoinPage() {
 														fullWidth
 														variant="contained"
 														color="primary"
-														// size="small"
+														disabled={
+															state.token === ""
+																? true
+																: false
+														}
 														onClick={handleFight}
 														className={
 															classes.button
@@ -123,7 +190,13 @@ function JoinPage() {
 													</Button>
 												</Grid>
 												<Grid item md={2}>
-													<Dialog />
+													<Dialog
+														show={
+															state.token === ""
+																? true
+																: false
+														}
+													/>
 												</Grid>
 												<Grid item md={2}>
 													<Typography

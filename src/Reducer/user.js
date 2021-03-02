@@ -1,5 +1,5 @@
-const reducer=(state,action)=>{
-    switch (action.type) {
+const reducer = (state, action) => {
+	switch (action.type) {
 		case "ADD_qID":
 			return {
 				...state,
@@ -40,46 +40,15 @@ const reducer=(state,action)=>{
 				...state,
 				points: action.payload,
 			};
+
 		case "ADD_WON":
 			return {
 				...state,
-				won:action.payload
-			}
-		case "ADD_WON1":
-			return {
-				...state,
-				user: {
-					...state.user,
-					fightWon: state.user.fightWon + 1,
-				},
-			};
-		case "ADD_PLAY":
-			return {
-				...state,
-				user: {
-					...state.user,
-					fightFought: state.user.fightFought + 1,
-				},
-			};
-		case "ADD_USER":
-			return {
-				...state,
-				user: action.payload.user,
-				token: action.payload.token,
-			};
-		case "reset":
-			return {
-				name: "",
-				qID: "",
-				joinID: "",
-				points: 0,
-				won: "",
-				user: "",
-				token: "",
+				won: action.payload,
 			};
 		default:
 			return state;
 	}
-}
+};
 
-export {reducer};
+export { reducer };

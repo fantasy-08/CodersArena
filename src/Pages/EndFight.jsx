@@ -2,7 +2,9 @@ import React, { useContext } from "react";
 import { InfoContext } from "../App";
 import { Typography, Container, Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-
+import pending from '../pending.svg'
+import lost from "../lost.svg";
+import winner from "../winner.svg";
 function EndFight() {
     
     const history = useHistory();
@@ -13,7 +15,7 @@ function EndFight() {
 			return null;
 		const id=setInterval(()=>{
 			const check=async()=>{
-				const res = await fetch(`api/user/${state.joinID}`);
+				const res = await fetch(`/api/user/${state.joinID}`);
 				const Data=await res.json();
 
 				if(Data.error){
@@ -50,7 +52,7 @@ function EndFight() {
 			{state.won === "won" ? (
 				<Typography variant="h1" align="center">
 					<img
-						src="https://www.flaticon.com/svg/vstatic/svg/1021/1021202.svg?token=exp=1614497355~hmac=75b2dceb0fadba6770bd75186d3c1b4e"
+						src={winner}
 						alt="winner"
 						width="154"
 						height="154"
@@ -59,7 +61,7 @@ function EndFight() {
 			) : state.won === "lost" ? (
 				<Typography variant="h2" align="center">
 					<img
-						src="https://www.flaticon.com/svg/vstatic/svg/2297/2297321.svg?token=exp=1614497853~hmac=d2f88843bf462de96c318610aae01a17"
+						src={lost}
 						alt="winner"
 						width="154"
 						height="154"
@@ -68,7 +70,7 @@ function EndFight() {
 			) : (
 				<Typography variant="h2" align="center">
 					<img
-						src="https://www.flaticon.com/svg/vstatic/svg/3296/3296327.svg?token=exp=1614497936~hmac=761fe6557ac2d832d4e91cc2bac892a6"
+						src={pending}
 						alt="winner"
 						width="154"
 						height="154"
@@ -86,7 +88,7 @@ function EndFight() {
 						history.push("/expired");
 					}}
 				>
-					Fing new fight
+					Find new fight
 				</Button>
 			</Typography>   
 		</Container>

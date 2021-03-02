@@ -25,6 +25,24 @@ int main()
     return 0;
 }
 `,
+	python: `
+#Welcome to Boring Coder.
+
+print('Hello world')
+`,
+	javascript: `
+//Welcome to Boring Coder.
+
+console.log('Hello world')
+`,
+	java: `
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+	}
+}
+`,
 };
 
 const compilerArg_exp = {

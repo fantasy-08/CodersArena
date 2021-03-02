@@ -6,7 +6,7 @@ function PrivateRoute({children,...rest}) {
     const { state } = useContext(InfoContext);
     return (
         <Route {...rest} render={()=>{
-            return state.qID !== "" && state.qID !== "finding" ?
+            return state.qID !== "" && state.qID !== "finding" && state.token!=="" && state.user!==""?
             children:
             <Redirect to='/' />
         }}/>

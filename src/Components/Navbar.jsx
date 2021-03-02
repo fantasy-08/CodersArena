@@ -2,7 +2,7 @@ import React from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
+import { IconButton, Button } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -10,11 +10,12 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { InfoContext } from "../App";
-import {useHistory} from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import CodeIcon from "@material-ui/icons/Code";
 import TimerIcon from "@material-ui/icons/Timer";
 import Timer from "react-compound-timer";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import FormDialog from "./SignIn";
 
 const useStyles = makeStyles((theme) => ({
 	grow: {
@@ -92,11 +93,11 @@ const useStyles = makeStyles((theme) => ({
 export default function PrimarySearchAppBar() {
 	const { state, dispatch } = React.useContext(InfoContext);
 	const classes = useStyles();
-    const history=useHistory();
+	const history = useHistory();
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const [time,setTime]=React.useState(false);
+	const [time, setTime] = React.useState(false);
 
 	const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -104,7 +105,10 @@ export default function PrimarySearchAppBar() {
 	const handleProfileMenuOpen = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
-
+	const handleSignOut = () => {
+		localStorage.removeItem("userData");
+		dispatch({ type: "reset" });
+	};
 	const handleMobileMenuClose = () => {
 		setMobileMoreAnchorEl(null);
 	};
@@ -117,10 +121,10 @@ export default function PrimarySearchAppBar() {
 	const handleMobileMenuOpen = (event) => {
 		setMobileMoreAnchorEl(event.currentTarget);
 	};
-    const handleEndTest=()=>{
-        setTime(false);
-        history.push("/end");
-    }
+	const handleEndTest = () => {
+		setTime(false);
+		history.push("/end");
+	};
 	const menuId = "primary-search-account-menu";
 	const renderMenu = (
 		<Menu
@@ -132,8 +136,14 @@ export default function PrimarySearchAppBar() {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<MenuItem onClick={handleMenuClose}>{state.joinID?`Join ID is ${state.joinID}`:"Find Fight to get joining info"}</MenuItem>
-			{/* <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
+			<MenuItem disabled onClick={handleMenuClose}>
+				Welcome {state.user.name}
+			</MenuItem>
+			<MenuItem onClick={handleMenuClose}>
+				{state.joinID
+					? `Join ID is ${state.joinID}`
+					: "Find Fight to get joining info"}
+			</MenuItem>
 		</Menu>
 	);
 
@@ -148,47 +158,72 @@ export default function PrimarySearchAppBar() {
 			open={isMobileMenuOpen}
 			onClose={handleMobileMenuClose}
 		>
-			<MenuItem>
-				<IconButton
-					aria-label="show 11 new notifications"
-					color="inherit"
-					onClick={handleEndTest}
-				>
-					<ExitToAppIcon />
-				</IconButton>
-				<p>End Test</p>
-			</MenuItem>
-			<MenuItem onClick={handleProfileMenuOpen}>
-				<IconButton
-					aria-label="account of current user"
-					aria-controls="primary-search-account-menu"
-					aria-haspopup="true"
-					color="inherit"
-				>
-					<AccountCircle />
-				</IconButton>
-				<p>Session Info</p>
-			</MenuItem>
+			{state.user !== "" ? (
+				<>
+					<MenuItem>
+						<IconButton
+							aria-label="show 11 new notifications"
+							color="inherit"
+							onClick={handleEndTest}
+						>
+							<ExitToAppIcon />
+						</IconButton>
+						<p>End Test</p>
+					</MenuItem>
+					<MenuItem onClick={handleProfileMenuOpen}>
+						<IconButton
+							aria-label="account of current user"
+							aria-controls="primary-search-account-menu"
+							aria-haspopup="true"
+							color="inherit"
+						>
+							<AccountCircle />
+						</IconButton>
+						<p>Profile</p>
+					</MenuItem>
+					<MenuItem>
+						<IconButton
+							aria-label="show 11 new notifications"
+							color="inherit"
+							onClick={handleSignOut}
+						>
+							<ExitToAppIcon />
+						</IconButton>
+						<p>Sign Out</p>
+					</MenuItem>
+				</>
+			) : (
+				<>
+					<MenuItem>
+						<FormDialog />
+
+						<p>
+							<AccountCircle />
+							Sign In/Up
+						</p>
+					</MenuItem>
+				</>
+			)}
 		</Menu>
 	);
 
-    React.useEffect(()=>{
-        if(state.createdOn===""){
+	React.useEffect(() => {
+		if (state.createdOn === "") {
 			setTime(false);
 			return null;
 		}
 
-        var T=state.createdOn;
-        var t1=Date.parse(T);
-        var t2=Date.now();
-        var dif=t2-t1;
+		var T = state.createdOn;
+		var t1 = Date.parse(T);
+		var t2 = Date.now();
+		var dif = t2 - t1;
 
-        dif=(dif)/(60000)
+		dif = dif / 60000;
 
-        if(dif<32){
-           setTime(true);
-        }
-    },[state])
+		if (dif < 32) {
+			setTime(true);
+		}
+	}, [state]);
 
 	return (
 		<div className={classes.grow}>
@@ -201,7 +236,7 @@ export default function PrimarySearchAppBar() {
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					{time ? <TimerIcon /> : <></>}
 					<div className={classes.time}>
-						<Typography variant="body1">
+						<Typography variant="body1" align="center">
 							{time ? (
 								<Timer
 									initialTime={32 * 60 * 1000}
@@ -223,42 +258,77 @@ export default function PrimarySearchAppBar() {
 					</div>
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
-						<>
-						{
-							state.points?
+						{state.user !== "" ? (
 							<>
-								<h4>{state.points}</h4>
+								<>
+									{state.points ? (
+										<>
+											<h4>{state.points}</h4>
+											<IconButton
+												aria-label="show 17 new notifications"
+												color="inherit"
+											>
+												<MonetizationOnIcon />
+											</IconButton>
+										</>
+									) : (
+										<></>
+									)}
+								</>
+								{state.joinID !== "" &&
+								state.joinID !== "finding" ? (
+									<IconButton
+										aria-label="show 17 new notifications"
+										color="inherit"
+										onClick={handleEndTest}
+									>
+										<span
+											style={{
+												margin: "0 .4em",
+												fontSize: ".5em",
+											}}
+										>
+											EXIT
+										</span>{" "}
+										<ExitToAppIcon />
+									</IconButton>
+								) : (
+									<></>
+								)}
 								<IconButton
-									aria-label="show 17 new notifications"
+									edge="end"
+									aria-label="account of current user"
+									aria-controls={menuId}
+									aria-haspopup="true"
+									onClick={handleProfileMenuOpen}
 									color="inherit"
+									style={{
+										margin: "0 .4em",
+									}}
 								>
-									<MonetizationOnIcon />
+									<span
+										style={{
+											margin: "0 .4em",
+											fontSize: ".5em",
+										}}
+									>
+										PROFILE
+									</span>{" "}
+									<AccountCircle />
 								</IconButton>
-							</>:
-							<></>
-						}								
-						</>
-						{state.joinID !== "" && state.joinID !== "finding" ? (
-							<IconButton
-								aria-label="show 17 new notifications"
-								color="inherit"
-								onClick={handleEndTest}
-							>
-								<ExitToAppIcon />
-							</IconButton>
+								<Button
+									color="primary"
+									onClick={handleSignOut}
+									style={{ color: "white" }}
+								>
+									Sign Out
+								</Button>
+							</>
 						) : (
-							<></>
+							<>
+								<FormDialog />
+							</>
 						)}
-						<IconButton
-							edge="end"
-							aria-label="account of current user"
-							aria-controls={menuId}
-							aria-haspopup="true"
-							onClick={handleProfileMenuOpen}
-							color="inherit"
-						>
-							<AccountCircle />
-						</IconButton>
 					</div>
 					<div className={classes.sectionMobile}>
 						<IconButton

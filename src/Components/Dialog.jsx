@@ -73,11 +73,11 @@ const DialogActions = withStyles((theme) => ({
 	},
 }))(MuiDialogActions);
 
-export default function CustomizedDialogs() {
+export default function CustomizedDialogs({ show }) {
 	const [open, setOpen] = React.useState(false);
-    const [joinID,setJoinID]=React.useState('')
-    const [data,setData]=React.useState();
-    const [isPresent,setIsPresent]=React.useState("");
+	const [joinID, setJoinID] = React.useState("");
+	const [data, setData] = React.useState();
+	const [isPresent, setIsPresent] = React.useState("");
 	const { dispatch } = React.useContext(InfoContext);
 
 	const handleClickOpen = () => {
@@ -86,8 +86,8 @@ export default function CustomizedDialogs() {
 	const handleClose = () => {
 		setOpen(false);
 	};
-    const handleJoin=()=>{
-        dispatch({
+	const handleJoin = () => {
+		dispatch({
 			type: "FOUND_INFO",
 			payload: {
 				qID: data.user.question,
@@ -95,32 +95,32 @@ export default function CustomizedDialogs() {
 				joinID: data.user.joiningID,
 			},
 		});
-		setJoinID('');
-        handleClose();
-    }
+		setJoinID("");
+		handleClose();
+	};
 
-    const handleFight=()=>{
-        setIsPresent("finding")
-        const getAPI=async()=>{
-            const res = await fetch(`api/user/${joinID}`);
-            const Data=await res.json();
+	const handleFight = () => {
+		setIsPresent("finding");
+		const getAPI = async () => {
+			const res = await fetch(`/api/user/${joinID}`);
+			const Data = await res.json();
 
-            if(Data.error){
-                setIsPresent("error");
-            }
-            else{
-                setData(Data);
-                setIsPresent("yes");
-            }
-        }
-        getAPI();
-    }
+			if (Data.error) {
+				setIsPresent("error");
+			} else {
+				setData(Data);
+				setIsPresent("yes");
+			}
+		};
+		getAPI();
+	};
 	return (
 		<div>
 			<Button
 				fullWidth
 				variant="outlined"
 				color="primary"
+				disabled={show}
 				onClick={handleClickOpen}
 			>
 				Join using id
