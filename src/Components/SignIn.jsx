@@ -12,15 +12,12 @@ import { InfoContext } from "../App";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import LockOpenTwoToneIcon from "@material-ui/icons/LockOpenTwoTone";
 
-export default function FormDialog() {
+export default function FormDialog({design}) {
 	const [open, setOpen] = React.useState(false);
 	const { state, dispatch } = React.useContext(InfoContext);
 	const [working, setWorking] = React.useState(false);
 	const [signin, setSignin] = React.useState(true);
-	const [error, setError] = React.useState({
-		color: "error",
-		msg: "",
-	});
+	const [error,setError]=React.useState({color:'',msg:''})
 	const [prop, setProp] = React.useState({
 		name: "",
 		email: "",
@@ -42,7 +39,6 @@ export default function FormDialog() {
 					email: prop.email,
 					password: prop.password,
 				};
-				console.log(param);
 				const res = await fetch("/signin", {
 					method: "POST",
 					headers: {
@@ -103,17 +99,26 @@ export default function FormDialog() {
 		};
 		signINF();
 	};
-
 	return (
 		<div>
-			<Button
-				color="primary"
-				onClick={handleClickOpen}
-				style={{ color: "white" }}
-				endIcon={<LockOpenTwoToneIcon/>}
-			>
-				Sign In
-			</Button>
+			{
+				design==="white"?
+				<Button
+					color="primary"
+					onClick={handleClickOpen}			
+					endIcon={<LockOpenTwoToneIcon />}
+					style={{color:"white"}}
+				>
+					Sign In
+				</Button>:
+				<Button
+					color="primary"
+					onClick={handleClickOpen}			
+					endIcon={<LockOpenTwoToneIcon />}
+				>
+					Sign In
+				</Button>
+			}			
 			<Dialog
 				open={open}
 				onClose={handleClose}

@@ -195,12 +195,7 @@ export default function PrimarySearchAppBar() {
 			) : (
 				<>
 					<MenuItem>
-						<FormDialog />
-
-						<p>
-							<AccountCircle />
-							Sign In/Up
-						</p>
+						<FormDialog design="black" />
 					</MenuItem>
 				</>
 			)}
@@ -326,7 +321,7 @@ export default function PrimarySearchAppBar() {
 							</>
 						) : (
 							<>
-								<FormDialog />
+								<FormDialog design="white" />
 							</>
 						)}
 					</div>
