@@ -1,4 +1,6 @@
-import React,{useReducer,createContext} from 'react';
+import React,{useReducer,createContext,useState} from 'react';
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 import QuestionBox from './Pages/QuestionBox';
 import JoinPage from "./Pages/JoinPage";
 import {reducer} from './Reducer/info';
@@ -23,6 +25,16 @@ const initialState={
 export const InfoContext = createContext();
 
 function App() {
+	const [darkState, setDarkState] = useState(true);
+	const palletType = darkState ? "dark" : "light";
+	const darkTheme = createMuiTheme({
+		palette: {
+			type: palletType,
+		},
+	});
+	const handleThemeChange = () => {
+		setDarkState(!darkState);
+	};
   const [state, dispatch] = useReducer(reducer, initialState)
 
   React.useEffect(()=>{
@@ -35,22 +47,28 @@ function App() {
 	});	
   },[])
   return (
-		<InfoContext.Provider value={{ state, dispatch }}>
-			<Router>
-				<>
-					<ReactNotification />
-					<NavBar />
-					<Route exact path="/" component={JoinPage} />
-					<PrivateRoute exact path="/fight">
-						<QuestionBox />
-					</PrivateRoute>
-					<PrivateRoute exact path="/end">
-						<EndTest />
-					</PrivateRoute>
-					<Route exact path="/expired" component={SessionExpired} />
-				</>
-			</Router>
-		</InfoContext.Provider>
+		<ThemeProvider theme={darkTheme}>
+			<InfoContext.Provider value={{ state, dispatch }}>
+				<Router>
+					<>
+						<ReactNotification />
+						<NavBar handleThemeChange={handleThemeChange} />
+						<Route exact path="/" component={JoinPage} />
+						<PrivateRoute exact path="/fight">
+							<QuestionBox />
+						</PrivateRoute>
+						<PrivateRoute exact path="/end">
+							<EndTest />
+						</PrivateRoute>
+						<Route
+							exact
+							path="/expired"
+							component={SessionExpired}
+						/>
+					</>
+				</Router>
+			</InfoContext.Provider>
+		</ThemeProvider>
   );
 }
 

@@ -16,6 +16,7 @@ import TimerIcon from "@material-ui/icons/Timer";
 import Timer from "react-compound-timer";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import FormDialog from "./SignIn";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
 
 const useStyles = makeStyles((theme) => ({
 	grow: {
@@ -38,30 +39,6 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.up("sm")]: {
 			display: "block",
 		},
-	},
-	search: {
-		position: "relative",
-		borderRadius: theme.shape.borderRadius,
-		backgroundColor: fade(theme.palette.common.white, 0.15),
-		"&:hover": {
-			backgroundColor: fade(theme.palette.common.white, 0.25),
-		},
-		marginRight: theme.spacing(2),
-		marginLeft: 0,
-		width: "100%",
-		[theme.breakpoints.up("sm")]: {
-			marginLeft: theme.spacing(3),
-			width: "auto",
-		},
-	},
-	searchIcon: {
-		padding: theme.spacing(0, 2),
-		height: "100%",
-		position: "absolute",
-		pointerEvents: "none",
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
 	},
 	inputRoot: {
 		color: "inherit",
@@ -90,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({ handleThemeChange }) {
 	const { state, dispatch } = React.useContext(InfoContext);
 	const classes = useStyles();
 	const history = useHistory();
@@ -228,6 +205,15 @@ export default function PrimarySearchAppBar() {
 					<Typography className={classes.title} variant="h6" noWrap>
 						Boring Coder
 					</Typography>
+					<IconButton
+						color="inherit"
+						onClick={handleThemeChange}
+						style={{
+							paddingBottom: "0.3em",
+						}}
+					>
+						<Brightness4Icon />
+					</IconButton>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					{time ? <TimerIcon /> : <></>}
 					<div className={classes.time}>
