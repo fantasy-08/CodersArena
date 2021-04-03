@@ -1,16 +1,24 @@
 import React,{useReducer,createContext,useState} from 'react';
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
 import QuestionBox from './Pages/QuestionBox';
 import JoinPage from "./Pages/JoinPage";
+import NewTest from "./Pages/NewTest";
 import {reducer} from './Reducer/info';
 import { BrowserRouter as Router,  Route } from "react-router-dom";
 import PrivateRoute from './Components/PrivateRoute';
+import LoginRoute from "./Components/LoginRoute";
 import SessionExpired from './Pages/SessionExpired';
 import EndTest from './Pages/EndFight';
 import NavBar from "./Components/Navbar";
+import Footer from './Components/Footer'
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
+import {
+	orange,
+	lightBlue,
+	deepPurple,
+	deepOrange,
+} from "@material-ui/core/colors";
 
 const initialState={
   name:"",
@@ -25,11 +33,19 @@ const initialState={
 export const InfoContext = createContext();
 
 function App() {
-	const [darkState, setDarkState] = useState(true);
+	const [darkState, setDarkState] = useState(false);
 	const palletType = darkState ? "dark" : "light";
+	const mainPrimaryColor = darkState ? orange[500] : "#3f51b5";
+	const mainSecondaryColor = darkState ? deepOrange[900] : "#ec407a";
 	const darkTheme = createMuiTheme({
 		palette: {
 			type: palletType,
+			primary: {
+				main: mainPrimaryColor,
+			},
+			secondary: {
+				main: mainSecondaryColor,
+			},
 		},
 	});
 	const handleThemeChange = () => {
@@ -57,6 +73,10 @@ function App() {
 						<PrivateRoute exact path="/fight">
 							<QuestionBox />
 						</PrivateRoute>
+						<LoginRoute exact path="/newTest">
+							<NewTest />
+						</LoginRoute>
+
 						<PrivateRoute exact path="/end">
 							<EndTest />
 						</PrivateRoute>

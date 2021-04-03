@@ -101,24 +101,24 @@ export default function FormDialog({design}) {
 	};
 	return (
 		<div>
-			{
-				design==="white"?
+			{design === "white" ? (
 				<Button
 					color="primary"
-					onClick={handleClickOpen}			
+					onClick={handleClickOpen}
 					endIcon={<LockOpenTwoToneIcon />}
-					style={{color:"white"}}
+					style={{ color: "white" }}
 				>
 					Sign In
-				</Button>:
+				</Button>
+			) : (
 				<Button
 					color="primary"
-					onClick={handleClickOpen}			
+					onClick={handleClickOpen}
 					endIcon={<LockOpenTwoToneIcon />}
 				>
 					Sign In
 				</Button>
-			}			
+			)}
 			<Dialog
 				open={open}
 				onClose={handleClose}
@@ -147,6 +147,7 @@ export default function FormDialog({design}) {
 							value={prop.name}
 							label="Name"
 							type="text"
+							style={{ margin: ".5em 0" }}
 							fullWidth
 							onChange={(e) => {
 								setProp((prev) => {
@@ -164,6 +165,7 @@ export default function FormDialog({design}) {
 						margin="dense"
 						name="email"
 						value={prop.email}
+						style={{ margin: ".5em 0" }}
 						label="Email Address"
 						type="email"
 						fullWidth
@@ -182,6 +184,7 @@ export default function FormDialog({design}) {
 						margin="dense"
 						name="password"
 						value={prop.password}
+						style={{ margin: ".5em 0" }}
 						onChange={(e) => {
 							setProp((prev) => {
 								return {
