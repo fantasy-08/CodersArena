@@ -21,7 +21,7 @@ const INIT = {
 	ans: 0,
 	temp: "",
 };
-export default function FormDialog({ testID, token }) {
+export default function FormDialog({ testID, token, setUpdate }) {
 	const [open, setOpen] = React.useState(false);
 	const [val, setVal] = React.useState(INIT);
 	const handleClickOpen = () => {
@@ -65,7 +65,9 @@ export default function FormDialog({ testID, token }) {
 					return;
 				} else {
 					setMsg(msg.message);
-
+					setUpdate((prev) => {
+						return prev + 1;
+					});
 					setTimeout(() => {
 						setVal(INIT);
 						handleClose();
@@ -178,7 +180,10 @@ export default function FormDialog({ testID, token }) {
 							</ol>
 						</>
 					) : (
-						<><br/><br/></>
+						<>
+							<br />
+							<br />
+						</>
 					)}
 
 					<label>Option</label>

@@ -7,6 +7,7 @@ import {reducer} from './Reducer/info';
 import { BrowserRouter as Router,  Route } from "react-router-dom";
 import PrivateRoute from './Components/PrivateRoute';
 import LoginRoute from "./Components/LoginRoute";
+import LoginRoute2 from "./Components/HomePage/LoginRoute";
 import SessionExpired from './Pages/SessionExpired';
 import EndTest from './Pages/EndFight';
 import NavBar from "./Components/Navbar";
@@ -19,7 +20,6 @@ import {
 	deepPurple,
 	deepOrange,
 } from "@material-ui/core/colors";
-
 const initialState={
   name:"",
   qID:"",
@@ -69,14 +69,18 @@ function App() {
 					<>
 						<ReactNotification />
 						<NavBar handleThemeChange={handleThemeChange} />
-						<Route exact path="/" component={JoinPage} />
+						<Route exact path="/combat" component={JoinPage} />
 						<PrivateRoute exact path="/fight">
 							<QuestionBox />
 						</PrivateRoute>
 						<LoginRoute exact path="/newTest">
 							<NewTest />
 						</LoginRoute>
-
+						<LoginRoute2
+							exact
+							state={state}
+							path="/"
+						></LoginRoute2>
 						<PrivateRoute exact path="/end">
 							<EndTest />
 						</PrivateRoute>

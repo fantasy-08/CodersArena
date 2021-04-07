@@ -1,36 +1,13 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import { Typography, Container } from "@material-ui/core";
 import Dialog from "../Components/TestCreate/Dialog";
 import { InfoContext } from "../App";
 import Question from "../Components/TestCreate/Question";
 import AddNewQuestion from "../Components/TestCreate/AddNewQuestion";
-const dummy = {
-	_id: "6068529ae27eb1053087735e",
-	joiningID: "bd5ce0fe-7416-4888-a969-8aeb31ea098c",
-	name: "First Test",
-	questions: [
-		{
-			options: ["phela nasha", "hello world", "all is well", "os labs"],
-			_id: "606856e11453ac25b07d35dd",
-			title: "First Question Added",
-			statement: "jo karna hai wo kar de bhai",
-			ans: 1,
-		},
-		{
-			options: ["phela nasha", "hello world", "all is well", "os labs"],
-			_id: "606856f41453ac25b07d35de",
-			title: "Second Question Added",
-			statement: "jo karna hai wo kar de bhai",
-			ans: 1,
-		},
-	],
-	owner: null,
-	attendes: [],
-	createdOn: "2021-04-03T11:33:46.329Z",
-	__v: 2,
-};
-const Content = ({ testID, testData, token, setUpdate }) => {
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import {Grid} from "@material-ui/core/"
+const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 	const handleRemove = (id) => {
 		const getIncFight = async () => {
 			const req = await fetch(`/api/${testID}/${id}`, {
@@ -41,6 +18,7 @@ const Content = ({ testID, testData, token, setUpdate }) => {
 			});
 			const data = await req.json();
 			if (data.error) {
+				console.log(data.error);
 				return;
 			}
 			setUpdate((prev) => {
@@ -48,6 +26,46 @@ const Content = ({ testID, testData, token, setUpdate }) => {
 			});
 		};
 		getIncFight();
+	};
+	const [name, setName] = React.useState("");
+	const handleName = () => {
+		const subfun = async () => {
+			const req = await fetch(`/api/test_name/${name}/${testID}`, {
+				method: "PUT",
+				headers: {
+					authorization: `Bearer ${token}`,
+				},
+			});
+			const data = await req.json();
+			if (data.error) {
+				console.log(data.error);
+				return;
+			}
+			setUpdate((prev) => {
+				return prev + 1;
+			});
+		};
+		subfun();
+	};
+	const handleDelete = () => {
+		const subfun = async () => {
+			const req = await fetch(`/api/${testID}`, {
+				method: "DELETE",
+				headers: {
+					authorization: `Bearer ${token}`,
+				},
+			});
+			const data = await req.json();
+			if (data.error) {
+				console.log(data.error);
+				return;
+			}
+            setTestID(false)
+			setUpdate((prev) => {
+				return prev + 1;
+			});
+		};
+		subfun();
 	};
 	return (
 		<>
@@ -60,6 +78,40 @@ const Content = ({ testID, testData, token, setUpdate }) => {
 				>
 					{`TestID ${testID}`}
 				</Typography>
+				<Button
+					color="secondary"
+					variant="contained"
+					align="right"
+					size="small"
+					onClick={handleDelete}
+				>
+					Delete Test
+				</Button>
+				{testData.name ? (
+					<></>
+				) : (
+					<>
+						<div style={{ textAlign: "center", paddingTop: "1em" }}>
+							<TextField
+								placeholder="Enter Test Name"
+								variant="outlined"
+								size="small"
+								value={name}
+								onChange={(e) => {
+									setName(e.target.value);
+								}}
+							/>
+							<Button
+								color="primary"
+								variant="contained"
+								onClick={handleName}
+								size="small"
+							>
+								Name Test
+							</Button>
+						</div>
+					</>
+				)}
 				<Typography
 					variant="h5"
 					component="h2"
@@ -67,28 +119,48 @@ const Content = ({ testID, testData, token, setUpdate }) => {
 					align="center"
 					style={{ paddingTop: "1em" }}
 				>
-					{testData.name}
+					Test Name: {testData.name}
 				</Typography>
-				{testData.questions ? (
+				{testData.questions > 0 ? (
 					<>
-						{testData.questions.map((question) => {
-							return (
-								<Question
-									id={question._id}
-									title={question.title}
-									statement={question.statement}
-									options={question.options}
-									ans={question.ans}
-									handleRemove={handleRemove}
-								/>
-							);
-						})}
+						<Grid container>
+							{testData.questions.map((question) => {
+								return (
+									<>
+										<Grid item xs={6}>
+											<Question
+												id={question._id}
+												title={question.title}
+												statement={question.statement}
+												options={question.options}
+												ans={question.ans}
+												handleRemove={handleRemove}
+											/>
+										</Grid>
+									</>
+								);
+							})}
+						</Grid>
 					</>
 				) : (
-					<></>
+					<>
+						<Typography
+							variant="h3"
+							component="h2"
+							gutterBottom
+							align="center"
+							style={{ paddingTop: "1em" }}
+						>
+							Create your first question
+						</Typography>
+					</>
 				)}
 				<div>
-					<AddNewQuestion testID={testID} token={token} />
+					<AddNewQuestion
+						testID={testID}
+						token={token}
+						setUpdate={setUpdate}
+					/>
 					<br />
 					<br />
 				</div>
@@ -166,6 +238,7 @@ export default function NewTest() {
 					testData={testData}
 					setUpdate={setUpdate}
 					token={state.token}
+					setTestID={setTestID}
 				/>
 			)}
 		</>
