@@ -24,21 +24,22 @@ function HomePageSignIn() {
 						<Card
 							loc="/combat"
 							title="CoderFight"
-							img="https://img.freepik.com/free-vector/raised-up-fist-red-fire-flame-silhouette-protest-demonstration-power-concept_148087-119.jpg?size=626&ext=jpg"
+							img="https://3qb9rm3ii1195ulba2zpd8yh-wpengine.netdna-ssl.com/wp-content/uploads/sites/2/2019/01/ezgif.com-video-to-gif-1.gif"
 						/>
 					</Grid>
 					<Grid item xs={12} md={6}>
 						<Card
 							loc="/test"
 							title="Give Test With ID"
-							img="https://www.litmus.com/wp-content/uploads/2021/02/animated-gif-man-in-motion.png"
+							img="http://gif-free.com/uploads/posts/2017-05/1494348515_spongebob-exam.gif"
+							popup={true}
 						/>
 					</Grid>
 					<Grid item xs={12} md={6}>
 						<Card
 							loc="/newTest"
 							title="Create New Test"
-							img="https://lh3.googleusercontent.com/proxy/pDBY1B5Cd5KancrFiK6lyEu0N3yWDU4UziULsZAV30pOnQ_wzWdirXaM2PrQLPfxutkyBHwnfxbhfvMpckViXZXSV9hW2vt-zZTL-gKEBPYNlcYfsWbeLjuUDQ"
+							img="https://visme.co/blog/wp-content/uploads/2020/03/animation-software-header.gif"
 						/>
 					</Grid>
 				</Grid>

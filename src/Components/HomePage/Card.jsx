@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import {  Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import Dialog1 from './Dialog';
 
 const useStyles = makeStyles({
 	root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
 	},
 });
 
-export default function MediaCard({loc,title,img}) {
+export default function MediaCard({loc,title,img,popup}) {
 	const classes = useStyles();
     let history = useHistory();
     const handleClick=()=>{
@@ -41,9 +42,15 @@ export default function MediaCard({loc,title,img}) {
 				</CardContent>
 			</CardActionArea>
 			<CardActions>
-				<Button size="small" color="primary" onClick={handleClick}>
-					Open
-				</Button>
+				{popup === true ? (
+					<>
+						<Dialog1/>
+					</>
+				) : (
+					<Button size="small" color="primary" onClick={handleClick}>
+						Open
+					</Button>
+				)}
 			</CardActions>
 		</Card>
 	);

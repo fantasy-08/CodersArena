@@ -37,9 +37,15 @@ function HomePageNoSignin() {
 						/>
 					</Grid>
 				</Grid>
-                <Typography variant='h3' align="center">
-                    Sign In to Start!
-                </Typography>
+
+				<Typography variant="h3" align="center">
+					<img
+						src="https://media1.giphy.com/media/gKHjdOoRutf5RTQsM7/giphy-preview.gif"
+						height="100em"
+						alt=""
+						srcset=""
+					/>
+				</Typography>
 			</Container>
 		</>
 	);

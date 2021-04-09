@@ -17,7 +17,6 @@ import Timer from "react-compound-timer";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import FormDialog from "./SignIn";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
-
 const useStyles = makeStyles((theme) => ({
 	grow: {
 		flexGrow: 1,
@@ -202,7 +201,9 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 			<AppBar position="static">
 				<Toolbar>
 					<CodeIcon style={{ fontSize: "2em" }} />
-					<Typography className={classes.title} variant="h6" noWrap>
+					<Typography className={classes.title} variant="h6" noWrap onClick={()=>{
+						history.push('/')
+					}}>
 						Boring Coder
 					</Typography>
 					<IconButton
