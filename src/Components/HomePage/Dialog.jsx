@@ -7,10 +7,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { useHistory } from "react-router-dom";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default function FormDialog() {
 	const [open, setOpen] = React.useState(false);
-
+	const [loading, setLoading] = React.useState(0);
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -53,12 +54,18 @@ export default function FormDialog() {
 					</Button>
 					<Button
 						onClick={() => {
+							setLoading(1);
 							history.push(`/test/${data}`);
+							setLoading(0);
 							handleClose();
 						}}
 						color="primary"
 					>
-						Enter Test
+						{loading !== 1 ? (
+							"Enter Test"
+						) : (
+							<CircularProgress disableShrink />
+						)}
 					</Button>
 				</DialogActions>
 			</Dialog>

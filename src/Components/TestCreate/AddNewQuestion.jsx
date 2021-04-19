@@ -14,6 +14,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 const INIT = {
 	title: "",
 	statement: "",
@@ -24,11 +25,14 @@ const INIT = {
 export default function FormDialog({ testID, token, setUpdate }) {
 	const [open, setOpen] = React.useState(false);
 	const [val, setVal] = React.useState(INIT);
+	const [loading, setLoading] = React.useState(0);
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
 	const [msg, setMsg] = React.useState();
 	const handleClose = () => {
+		setVal(INIT);
+		setMsg('')
 		setOpen(false);
 	};
 	const handleSubmit = () => {
@@ -48,6 +52,7 @@ export default function FormDialog({ testID, token, setUpdate }) {
 					options: val.options,
 					ans: val.ans,
 				};
+				setLoading(1);
 				const request = await fetch(`/api/${testID}/question`, {
 					method: "POST",
 					headers: {
@@ -59,7 +64,7 @@ export default function FormDialog({ testID, token, setUpdate }) {
 				});
 
 				const msg = await request.json();
-
+				setLoading(0);
 				if (msg.error) {
 					setMsg(msg.error);
 					return;
@@ -71,7 +76,7 @@ export default function FormDialog({ testID, token, setUpdate }) {
 					setTimeout(() => {
 						setVal(INIT);
 						handleClose();
-					}, 3000);
+					}, 2000);
 				}
 			};
 			submit();
@@ -258,7 +263,11 @@ export default function FormDialog({ testID, token, setUpdate }) {
 						Cancel
 					</Button>
 					<Button onClick={handleSubmit} color="primary">
-						ADD QUESTION
+						{loading !== 1 ? (
+							"Add Question"
+						) : (
+							<CircularProgress disableShrink />
+						)}
 					</Button>
 				</DialogActions>
 			</Dialog>

@@ -8,6 +8,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import TextField from "@material-ui/core/TextField";
 import MuiAlert from "@material-ui/lab/Alert";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -17,6 +18,8 @@ export default function AlertDialogSlide({ token, setTestID }) {
 	const [open, setOpen] = React.useState(false);
 	const [errorMsg, setErrorMsg] = React.useState(false);
 	const [localTest, setLocalTest] = React.useState();
+	const [loading,setLoading]=React.useState(0);
+
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -27,6 +30,7 @@ export default function AlertDialogSlide({ token, setTestID }) {
 
 	const handleCreate = () => {
 		const getIncFight = async () => {
+			setLoading(1);
 			const req = await fetch(`/api/createTest`, {
 				method: "POST",
 				headers: {
@@ -34,6 +38,7 @@ export default function AlertDialogSlide({ token, setTestID }) {
 				},
 			});
 			const data = await req.json();
+			setLoading(0);
 			if (data.error) {
 				setErrorMsg(data.error);
 				return;
@@ -46,6 +51,7 @@ export default function AlertDialogSlide({ token, setTestID }) {
 	};
 	const handleHave = () => {
 		const getIncFight = async () => {
+			setLoading(2);
 			const req = await fetch(`/api/test/${localTest}/owner`, {
 				method: "GET",
 				headers: {
@@ -53,7 +59,7 @@ export default function AlertDialogSlide({ token, setTestID }) {
 				},
 			});
 			const data = await req.json();
-			console.log(data);
+			setLoading(0);
 			if (data.error) {
 				setErrorMsg(data.error);
 				return;
@@ -111,10 +117,18 @@ export default function AlertDialogSlide({ token, setTestID }) {
 
 				<DialogActions>
 					<Button onClick={handleCreate} color="primary">
-						Create Test
+						{loading !== 1 ? (
+							"Create Test"
+						) : (
+							<CircularProgress disableShrink />
+						)}
 					</Button>
 					<Button onClick={handleHave} color="primary">
-						I have one
+						{loading !== 2 ? (
+							"I Have One"
+						) : (
+							<CircularProgress disableShrink />
+						)}
 					</Button>
 				</DialogActions>
 			</Dialog>

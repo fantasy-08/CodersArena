@@ -6,7 +6,9 @@ import Question from "../Components/TestCreate/Question";
 import AddNewQuestion from "../Components/TestCreate/AddNewQuestion";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import {Grid} from "@material-ui/core/"
+import { Grid, Card, CardContent } from "@material-ui/core/";
+import DeleteIcon from "@material-ui/icons/Delete";
+import TimeDialog from '../Components/TestCreate/TimeDialog';
 const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 	const handleRemove = (id) => {
 		const getIncFight = async () => {
@@ -28,6 +30,7 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 		getIncFight();
 	};
 	const [name, setName] = React.useState("");
+	const [select, setSelect] = React.useState();
 	const handleName = () => {
 		const subfun = async () => {
 			const req = await fetch(`/api/test_name/${name}/${testID}`, {
@@ -60,33 +63,67 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 				console.log(data.error);
 				return;
 			}
-            setTestID(false)
+			setTestID(false);
 			setUpdate((prev) => {
 				return prev + 1;
 			});
 		};
 		subfun();
 	};
+	const handleSelect = (ques) => {
+		setSelect(ques);
+		console.log(ques)
+	};
+	React.useEffect(() => {
+		if (testData && testData.questions) {
+			setSelect(testData.questions[0]);
+		}
+	}, [testData]);
 	return (
 		<>
 			<Container>
-				<Typography
-					variant="h6"
-					component="h2"
-					align="center"
-					style={{ paddingTop: "1em" }}
-				>
-					{`TestID ${testID}`}
-				</Typography>
-				<Button
-					color="secondary"
-					variant="contained"
-					align="right"
-					size="small"
-					onClick={handleDelete}
-				>
-					Delete Test
-				</Button>
+				<Grid container spacing={2}>
+					<Grid item xs={12} md={4}>
+						<Typography
+							variant="h4"
+							component="h2"
+							gutterBottom
+							align="center"
+							style={{ paddingTop: ".5em" }}
+						>
+							{testData.name}
+						</Typography>
+					</Grid>
+					<Grid item xs={12} md={4}>
+						<Typography
+							variant="body2"
+							component="h2"
+							align="center"
+							style={{ paddingTop: "1em", marginTop: "1em" }}
+						>
+							{`TestID ${testID}`}
+						</Typography>
+					</Grid>
+					<Grid item xs={12} md={2}>
+						<TimeDialog
+							testID={testID}
+							testData={testData}
+							setUpdate={setUpdate}
+							token={token}
+						/>
+					</Grid>
+					<Grid item xs={12} md={2}>
+						<Button
+							color="secondary"
+							variant="contained"
+							size="small"
+							onClick={handleDelete}
+							style={{ marginTop: "1.6em" }}
+						>
+							Delete Test
+						</Button>
+					</Grid>
+				</Grid>
 				{testData.name ? (
 					<></>
 				) : (
@@ -106,40 +143,139 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 								variant="contained"
 								onClick={handleName}
 								size="small"
+								style={{ marginLeft: "1em", marginTop: ".2em" }}
 							>
 								Name Test
 							</Button>
 						</div>
 					</>
 				)}
-				<Typography
-					variant="h5"
-					component="h2"
-					gutterBottom
-					align="center"
-					style={{ paddingTop: "1em" }}
-				>
-					Test Name: {testData.name}
-				</Typography>
-				{testData.questions > 0 ? (
+				{testData &&
+				testData.questions &&
+				testData.questions.length > 0 ? (
 					<>
-						<Grid container>
-							{testData.questions.map((question) => {
-								return (
+						<Grid container spacing={2}>
+							<Grid item xs={3}>
+								<>
+									{testData.questions.map((ques, index) => {
+										return (
+											<>
+												<Card
+													variant="outlined"
+													style={{
+														marginTop: "1em",
+														backgroundColor:
+															ques === select
+																? "rgba(0,0,0,0.2)"
+																: "",
+													}}
+													onClick={(e) => {
+														handleSelect(ques);
+													}}
+												>
+													<CardContent>
+														<Typography
+															color="textSecondary"
+															gutterBottom
+														>
+															{`${index + 1} ${
+																ques.title
+															}`}
+															<span
+																style={{
+																	display:
+																		"none",
+																}}
+															>
+																{ques._id}
+															</span>
+														</Typography>
+													</CardContent>
+												</Card>
+											</>
+										);
+									})}
+									<br />
+									<AddNewQuestion
+										testID={testID}
+										token={token}
+										setUpdate={setUpdate}
+									/>
+								</>
+							</Grid>
+							<Grid item xs={9}>
+								{select ? (
 									<>
-										<Grid item xs={6}>
-											<Question
-												id={question._id}
-												title={question.title}
-												statement={question.statement}
-												options={question.options}
-												ans={question.ans}
-												handleRemove={handleRemove}
-											/>
+										<Card
+											variant="outlined"
+											style={{ marginTop: "1em" }}
+										>
+											<CardContent>
+												<Typography
+													variant="h5"
+													component="h2"
+												>
+													{select.title}
+												</Typography>
+												<br />
+												<Typography
+													variant="body2"
+													component="p"
+												>
+													{select.statement}
+												</Typography>
+											</CardContent>
+										</Card>
+										<br />
+										<Grid container spacing={1}>
+											{select.options.map(
+												(option, index) => {
+													return (
+														<Grid item xs={6}>
+															<Card
+																variant="outlined"
+																style={{
+																	background:
+																		select.ans ===
+																		index +
+																			1
+																			? "lightgreen"
+																			: "",
+																}}
+															>
+																<CardContent>
+																	<Typography
+																		variant="body2"
+																		component="p"
+																	>
+																		{`${
+																			index +
+																			1
+																		}.)     ${option}`}
+																	</Typography>
+																</CardContent>
+															</Card>
+														</Grid>
+													);
+												}
+											)}
 										</Grid>
+										<br />
+										<Button
+											variant="contained"
+											color="secondary"
+											startIcon={<DeleteIcon />}
+											onClick={() => {
+												handleRemove(select._id);
+											}}
+										>
+											Delete
+										</Button>
 									</>
-								);
-							})}
+								) : (
+									<></>
+								)}
+							</Grid>
 						</Grid>
 					</>
 				) : (
@@ -149,21 +285,22 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 							component="h2"
 							gutterBottom
 							align="center"
-							style={{ paddingTop: "1em" }}
 						>
-							Create your first question
+							<img
+								src="https://miro.medium.com/max/2400/1*OicrRIgS2GlMkhzY7GIwOA.gif"
+								height="400em"
+							/>
+							<br />
+							<img src="https://www.animatedimages.org/data/media/426/animated-button-image-0538.gif" />
 						</Typography>
+
+						<AddNewQuestion
+							testID={testID}
+							token={token}
+							setUpdate={setUpdate}
+						/>
 					</>
 				)}
-				<div>
-					<AddNewQuestion
-						testID={testID}
-						token={token}
-						setUpdate={setUpdate}
-					/>
-					<br />
-					<br />
-				</div>
 			</Container>
 		</>
 	);

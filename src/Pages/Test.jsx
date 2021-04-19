@@ -5,15 +5,24 @@ import {
 	Card,
 	CardContent,
 	Container,
+	Button,
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { InfoContext } from "../App";
+import IconButton from "@material-ui/core/IconButton";
+import BKICON from "@material-ui/icons/Bookmark";
+import NBKICON from "@material-ui/icons/BookmarkBorder";
+import Timer from "../Components/TestPage/Timer";
+import Exit from "../Components/TestPage/EndTestDialog";
+
 function Test() {
 	const { testID } = useParams();
 	const [data, setData] = React.useState();
 	const { state } = React.useContext(InfoContext);
 	const [present, setPresent] = React.useState();
-    const [choose,setChoose]=React.useState({})
+	const [choose, setChoose] = React.useState({});
+	const [bookmarked, setBookmarked] = React.useState([]);
+	const [endTest, setEndTest] = React.useState(false);
 	React.useEffect(() => {
 		const getIncFight = async () => {
 			const token = state.token;
@@ -27,18 +36,41 @@ function Test() {
 			const d = await req.json();
 			if (d.message) {
 				setData(d.message);
-                setPresent(d.message[0])
+				setPresent(d.message[0]);
 			}
 		};
 		getIncFight();
 	}, [state.token]);
+
+
 	const handleSelect = (e) => {
 		setPresent(e);
 	};
+	const handleChange = (id, v) => {
+		if (v) {
+			setBookmarked((prev) => {
+				prev.push(id);
+				return prev;
+			});
+		} else {
+			setBookmarked((prev) => {
+				prev.pop(id);
+				return prev;
+			});
+		}
+	};
+
+	React.useEffect(()=>{
+
+	},[endTest]);
+	
 	return (
 		<>
 			<Container>
 				<Grid container spacing={2}>
+					<Grid item xs={12}>
+						<Exit setEndTest={setEndTest} />
+					</Grid>
 					<Grid item xs={3}>
 						{data ? (
 							<>
@@ -47,7 +79,19 @@ function Test() {
 										<>
 											<Card
 												variant="outlined"
-												style={{ marginTop: "1em" }}
+												style={{
+													marginTop: "1em",
+													backgroundColor:
+														ques === present
+															? "lightgrey"
+															: bookmarked.indexOf(
+																	ques._id
+															  ) !== -1
+															? "lightpink"
+															: choose[ques._id]
+															? "rgba(173,255,47,0.2)"
+															: "",
+												}}
 												onClick={(e) => {
 													handleSelect(ques);
 												}}
@@ -82,13 +126,42 @@ function Test() {
 								<Card
 									variant="outlined"
 									style={{ marginTop: "1em" }}
-									onClick={handleSelect}
 								>
 									<CardContent>
-										<Typography variant="h5" component="h2">
-											{present.title}
-										</Typography>
-                                        <br/>
+										<Grid container>
+											<Grid item xs={6}>
+												<Typography
+													variant="h5"
+													component="h2"
+												>
+													{present.title}
+												</Typography>
+											</Grid>
+											<Grid item xs={6}>
+												<IconButton
+													onClick={() => {
+														const val =
+															bookmarked.indexOf(
+																present._id
+															) === -1
+																? true
+																: false;
+														handleChange(
+															present._id,
+															val
+														);
+													}}
+												>
+													{bookmarked.indexOf(
+														present._id
+													) === -1 ? (
+														<NBKICON />
+													) : (
+														<BKICON />
+													)}
+												</IconButton>
+											</Grid>
+										</Grid>
 										<Typography
 											variant="body2"
 											component="p"
@@ -97,91 +170,64 @@ function Test() {
 										</Typography>
 									</CardContent>
 								</Card>
-
 								<Grid container spacing={1}>
-									{present.options.map((option,index) => {
-                                        const val=present._id
+									{present.options.map((option, index) => {
+										const val = present._id;
 										return (
 											<>
-												{choose[val] === index + 1 ? (
-													<>
-														<Grid item xs={6}>
-															<Card
-																variant="outlined"
-																style={{
-																	marginTop:
-																		"1em",
-																	backgroundColor:
-																		"rgba(173,255,47,0.2)",
-																}}
-																onClick={() => {
-																	setChoose(
-																		(
-																			prev
-																		) => {
-																			return {
-																				...prev,
-																				[present._id]:
-																					index +
-																					1,
-																			};
-																		}
-																	);
-																}}
-															>
-																<CardContent>
-																	<Typography
-																		variant="body2"
-																		component="p"
-																	>
-																		{`${
+												<Grid item xs={6}>
+													<Card
+														variant="outlined"
+														style={{
+															marginTop: "1em",
+															backgroundColor:
+																choose[val] ===
+																index + 1
+																	? "rgba(173,255,47,0.2)"
+																	: "",
+														}}
+														onClick={() => {
+															setChoose(
+																(prev) => {
+																	if (
+																		prev[
+																			present
+																				._id
+																		] &&
+																		prev[
+																			present
+																				._id
+																		] ===
 																			index +
-																			1
-																		}.)     ${option}`}
-																	</Typography>
-																</CardContent>
-															</Card>
-														</Grid>
-													</>
-												) : (
-													<>
-														<Grid item xs={6}>
-															<Card
-																variant="outlined"
-																style={{
-																	marginTop:
-																		"1em",
-																}}
-																onClick={() => {
-																	setChoose(
-																		(
-																			prev
-																		) => {
-																			return {
-																				...prev,
-																				[present._id]:
-																					index +
-																					1,
-																			};
-																		}
-																	);
-																}}
-															>
-																<CardContent>
-																	<Typography
-																		variant="body2"
-																		component="p"
-																	>
-																		{`${
+																				1
+																	) {
+																		return {
+																			...prev,
+																			[present._id]: 0,
+																		};
+																	}
+																	return {
+																		...prev,
+																		[present._id]:
 																			index +
-																			1
-																		}.)     ${option}`}
-																	</Typography>
-																</CardContent>
-															</Card>
-														</Grid>
-													</>
-												)}
+																			1,
+																	};
+																}
+															);
+														}}
+													>
+														<CardContent>
+															<Typography
+																variant="body2"
+																component="p"
+															>
+																{`${
+																	index + 1
+																}.)     ${option}`}
+															</Typography>
+														</CardContent>
+													</Card>
+												</Grid>
 											</>
 										);
 									})}
@@ -193,6 +239,11 @@ function Test() {
 					</Grid>
 				</Grid>
 			</Container>
+			{data && data.length ? (
+				<Timer testID={testID} setEndTest={setEndTest} />
+			) : (
+				<></>
+			)}
 		</>
 	);
 }
