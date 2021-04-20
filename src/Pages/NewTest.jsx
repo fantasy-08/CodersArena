@@ -291,7 +291,7 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 								height="400em"
 							/>
 							<br />
-							<img src="https://www.animatedimages.org/data/media/426/animated-button-image-0538.gif" />
+							{/* <img src="https://www.animatedimages.org/data/media/426/animated-button-image-0538.gif" /> */}
 						</Typography>
 
 						<AddNewQuestion

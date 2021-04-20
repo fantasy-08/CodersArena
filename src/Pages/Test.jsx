@@ -37,10 +37,14 @@ function Test() {
 				},
 			});
 			const d = await req.json();
-			if (d.message) {
-				setData(d.message);
-				setPresent(d.message[0]);
+			if (d.error === "User already attempted the test"){
+				setEndTest(true)
 			}
+				if (d.message) {
+					setData(d.message);
+					setPresent(d.message[0]);
+				}
+
 		};
 		getIncFight();
 	}, [state.token]);
@@ -96,7 +100,18 @@ function Test() {
 		<>
 			<Container>
 				<Grid container spacing={2}>
-					<Grid item xs={12}>
+					<Grid item xs={12} md={6}>
+						<Typography
+							variant="h4"
+							component="h2"
+							gutterBottom
+							align="center"
+							style={{ paddingTop: ".5em" }}
+						>
+							{data.name}
+						</Typography>
+					</Grid>
+					<Grid item xs={12} md={6}>
 						<Exit handleExit={handleExit} />
 					</Grid>
 					<Grid item xs={3}>

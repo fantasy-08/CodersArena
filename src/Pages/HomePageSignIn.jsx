@@ -43,11 +43,11 @@ function HomePageSignIn() {
 						/>
 					</Grid>
 				</Grid>
-				<img
+				{/* <img
 					src="https://media0.giphy.com/media/3oipPTHYlTpCw8oBBy/source.gif"
 					width="150px"
 					height="150px"
-				/>
+				/> */}
 			</Container>
 		</>
 	);

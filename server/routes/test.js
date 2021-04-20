@@ -9,8 +9,10 @@ const { v4: uuidv4 } = require("uuid");
 
 router.get('/api/test/:testID/owner',requireLogin,(req,res)=>{
     const testID=req.params.testID
+    console.log(testID);
     Test.findById(testID)
     .then(test=>{
+        console.log(`${test.owner}` === `${req.user._id}`);
         if(`${test.owner}`===`${req.user._id}`){
             return res.json(test)
         }
