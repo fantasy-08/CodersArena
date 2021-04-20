@@ -11,6 +11,7 @@ import LoginRoute2 from "./Components/HomePage/LoginRoute";
 import SessionExpired from './Pages/SessionExpired';
 import EndTest from './Pages/EndFight';
 import Test from "./Pages/Test";
+import EndTestMCQ from "./Pages/EndTest";
 import NavBar from "./Components/Navbar";
 import Footer from './Components/Footer'
 import ReactNotification from "react-notifications-component";
@@ -79,6 +80,9 @@ function App() {
 						</LoginRoute>
 						<LoginRoute exact path="/test/:testID">
 							<Test />
+						</LoginRoute>
+						<LoginRoute exact path="/leaderboard/:testID">
+							<EndTestMCQ />
 						</LoginRoute>
 						<LoginRoute2 exact state={state} path="/"></LoginRoute2>
 						<PrivateRoute exact path="/end">

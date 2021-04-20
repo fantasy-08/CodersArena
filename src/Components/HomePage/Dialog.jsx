@@ -31,15 +31,31 @@ export default function FormDialog() {
 				onClose={handleClose}
 				aria-labelledby="form-dialog-title"
 			>
-				<DialogTitle id="form-dialog-title">Test ID</DialogTitle>
+				<DialogTitle id="form-dialog-title" align="center">
+					Test ID
+				</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Enter Test ID to give your unique test!
+						<b>
+							<u>Instructions</u>:
+						</b>
+						<ul>
+							<li>
+								Enter test ID to <b>give your test</b>
+							</li>
+							<li>
+								To view the <b>Learderboard</b> simple enter
+								test ID here and if you have attempted the test
+								you will see the leaderboard
+							</li>
+						</ul>
+						<br />
 					</DialogContentText>
 					<TextField
 						autoFocus
 						margin="dense"
 						label="JoinID"
+						variant="outlined"
 						type="text"
 						value={data}
 						onChange={(e) => {
@@ -49,7 +65,11 @@ export default function FormDialog() {
 					/>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClose} color="primary">
+					<Button
+						onClick={handleClose}
+						color="primary"
+						variant="outlined"
+					>
 						Cancel
 					</Button>
 					<Button
@@ -59,10 +79,11 @@ export default function FormDialog() {
 							setLoading(0);
 							handleClose();
 						}}
+						variant="outlined"
 						color="primary"
 					>
 						{loading !== 1 ? (
-							"Enter Test"
+							"Enter Test/Result"
 						) : (
 							<CircularProgress disableShrink />
 						)}

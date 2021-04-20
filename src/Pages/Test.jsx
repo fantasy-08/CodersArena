@@ -14,8 +14,10 @@ import BKICON from "@material-ui/icons/Bookmark";
 import NBKICON from "@material-ui/icons/BookmarkBorder";
 import Timer from "../Components/TestPage/Timer";
 import Exit from "../Components/TestPage/EndTestDialog";
-
+import { useHistory } from "react-router-dom";
 function Test() {
+	const history = useHistory();
+
 	const { testID } = useParams();
 	const [data, setData] = React.useState();
 	const { state } = React.useContext(InfoContext);
@@ -23,6 +25,7 @@ function Test() {
 	const [choose, setChoose] = React.useState({});
 	const [bookmarked, setBookmarked] = React.useState([]);
 	const [endTest, setEndTest] = React.useState(false);
+
 	React.useEffect(() => {
 		const getIncFight = async () => {
 			const token = state.token;
@@ -42,7 +45,6 @@ function Test() {
 		getIncFight();
 	}, [state.token]);
 
-
 	const handleSelect = (e) => {
 		setPresent(e);
 	};
@@ -59,17 +61,43 @@ function Test() {
 			});
 		}
 	};
+	const handleExit = () => {
+		setEndTest(true);
+	};
+	React.useEffect(() => {
+		if (endTest === true) {
+			
+			const submitTest = async()=>{
+				const parameter = choose;
+				const request = await fetch(`/api/${testID}/evaluate`, {
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+						authorization: `Bearer ${state.token}`,
+					},
+					body: JSON.stringify(parameter),
+				});
+				const result=await request.json();
+				if(result.error)
+				{
+					console.log("error submitting result")
+					return null;
+				}
+				console.log(result)
+				history.push(`/leaderboard/${testID}`);
+			}
+			submitTest();
+			setData();
+		}
+	}, [endTest]);
 
-	React.useEffect(()=>{
-
-	},[endTest]);
-	
 	return (
 		<>
 			<Container>
 				<Grid container spacing={2}>
 					<Grid item xs={12}>
-						<Exit setEndTest={setEndTest} />
+						<Exit handleExit={handleExit} />
 					</Grid>
 					<Grid item xs={3}>
 						{data ? (
@@ -240,7 +268,7 @@ function Test() {
 				</Grid>
 			</Container>
 			{data && data.length ? (
-				<Timer testID={testID} setEndTest={setEndTest} />
+				<Timer testID={testID} handleExit={handleExit} />
 			) : (
 				<></>
 			)}

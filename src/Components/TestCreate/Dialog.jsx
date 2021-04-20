@@ -102,8 +102,19 @@ export default function AlertDialogSlide({ token, setTestID }) {
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-slide-description">
-						If you have a test ID enter one or else generate new
-						Test ID
+						<b>
+							<i>Instructions:</i>
+						</b>
+						<ul>
+							<li>
+								If you have a <b>test ID</b> enter here to have
+								admin access and click <i>"I have One"</i> <b>button</b>
+							</li>
+							<li>
+								If you want to create new <b>test</b> click
+								<i>"Create New Test"</i> <b>button</b>
+							</li>
+						</ul>
 					</DialogContentText>
 					<TextField
 						placeholder="Enter Test-ID/Create New"
@@ -116,14 +127,22 @@ export default function AlertDialogSlide({ token, setTestID }) {
 				</DialogContent>
 
 				<DialogActions>
-					<Button onClick={handleCreate} color="primary">
+					<Button
+						onClick={handleCreate}
+						color="primary"
+						variant="outlined"
+					>
 						{loading !== 1 ? (
-							"Create Test"
+							"Create New Test"
 						) : (
 							<CircularProgress disableShrink />
 						)}
 					</Button>
-					<Button onClick={handleHave} color="primary">
+					<Button
+						onClick={handleHave}
+						color="primary"
+						variant="outlined"
+					>
 						{loading !== 2 ? (
 							"I Have One"
 						) : (

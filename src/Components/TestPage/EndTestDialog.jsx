@@ -7,7 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-export default function AlertDialog(setEndTest) {
+export default function AlertDialog({handleExit}) {
 	const [open, setOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
@@ -17,6 +17,10 @@ export default function AlertDialog(setEndTest) {
 	const handleClose = () => {
 		setOpen(false);
 	};
+
+    const handleExit1=()=>{
+        handleExit();
+    }
 
 	return (
 		<div>
@@ -54,7 +58,7 @@ export default function AlertDialog(setEndTest) {
 						NO I still want to try
 					</Button>
 					<Button
-						onClick={()=>setEndTest(true)}
+						onClick={handleExit1}
 						color="secondary"
 						autoFocuscolor="secondary"
 					>

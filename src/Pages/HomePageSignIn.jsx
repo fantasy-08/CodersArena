@@ -30,7 +30,7 @@ function HomePageSignIn() {
 					<Grid item xs={12} md={3}>
 						<Card
 							loc="/test"
-							title="GIVE TEST"
+							title="GIVE TEST/RESULT"
 							img="http://gif-free.com/uploads/posts/2017-05/1494348515_spongebob-exam.gif"
 							popup={true}
 						/>
