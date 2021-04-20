@@ -10,7 +10,7 @@ const io = require("socket.io")(server, {
 const PORT=process.env.PORT || 5000;
 
 const mongoose = require("mongoose");
-const { MONGOURI } = require("./keys/keys.js");
+// const { MONGOURI } = require("./keys/keys.js");
 const cors = require("cors");
 
 app.use(cors());
@@ -43,7 +43,7 @@ app.use(require("./routes/compiler"));
 app.use(require("./routes/problem"));
 
 //DB Connection
-mongoose.connect(MONGOURI, {
+mongoose.connect(process.env.MONGOURI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 });
@@ -55,6 +55,8 @@ mongoose.connection.on("connected", () =>
 mongoose.connection.on("error", () => {
 	console.log("error connecting to Data Base");
 });
+
+app.use(express.static("client/build"));
 
 server.listen(PORT, () => {
 	console.log(`Listening and Running on port ${PORT}`);
