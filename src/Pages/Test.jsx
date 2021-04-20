@@ -108,7 +108,7 @@ function Test() {
 							align="center"
 							style={{ paddingTop: ".5em" }}
 						>
-							{data.name}
+							{data && data.name ?data.name:""}
 						</Typography>
 					</Grid>
 					<Grid item xs={12} md={6}>

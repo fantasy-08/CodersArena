@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import { Grid, Card, CardContent } from "@material-ui/core/";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TimeDialog from '../Components/TestCreate/TimeDialog';
+import Settings from "../Components/TestCreate/Settings";
 const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 	const handleRemove = (id) => {
 		const getIncFight = async () => {
@@ -83,7 +84,7 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 		<>
 			<Container>
 				<Grid container spacing={2}>
-					<Grid item xs={12} md={4}>
+					<Grid item xs={12} md={3}>
 						<Typography
 							variant="h4"
 							component="h2"
@@ -94,7 +95,7 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 							{testData.name}
 						</Typography>
 					</Grid>
-					<Grid item xs={12} md={4}>
+					<Grid item xs={12} md={3}>
 						<Typography
 							variant="body2"
 							component="h2"
@@ -122,6 +123,14 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 						>
 							Delete Test
 						</Button>
+					</Grid>
+					<Grid item xs={12} md={2}>
+						<Settings
+							testID={testID}
+							testData={testData}
+							setUpdate={setUpdate}
+							token={token}
+						/>
 					</Grid>
 				</Grid>
 				{testData.name ? (

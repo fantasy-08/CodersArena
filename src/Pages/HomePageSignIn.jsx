@@ -1,8 +1,10 @@
 import React from "react";
 import { Typography,Grid,Container } from "@material-ui/core";
 import Card from '../Components/HomePage/Card';
+import PublicTest from './SignInHome/PublicTest'
 
 function HomePageSignIn() {
+
 	return (
 		<>
 			<Typography
@@ -10,7 +12,7 @@ function HomePageSignIn() {
 				align="center"
 				style={{ paddingTop: "1em", paddingBottom: "1em" }}
 			>
-				<b>CHOOSE</b> FROM SERVICES WE OFFER				
+				<b>CHOOSE</b> FROM SERVICES WE OFFER
 			</Typography>
 
 			<Container>
@@ -43,11 +45,14 @@ function HomePageSignIn() {
 						/>
 					</Grid>
 				</Grid>
-				{/* <img
-					src="https://media0.giphy.com/media/3oipPTHYlTpCw8oBBy/source.gif"
-					width="150px"
-					height="150px"
-				/> */}
+				<Typography
+					variant="h6"
+					align="center"
+					style={{ paddingTop: ".5em", paddingBottom: ".5em" }}
+				>
+					<b>OPEN</b> TESTS
+				</Typography>
+				<PublicTest/>
 			</Container>
 		</>
 	);
