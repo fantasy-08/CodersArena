@@ -2,20 +2,14 @@ import React from "react";
 import "./timer.css";
 import Timer from "react-compound-timer";
 
-export default function Timer1({ testID, handleExit }) {
+export default function Timer1({ timeT, handleEndTest }) {
 	const [time, setTime] = React.useState(0);
 	React.useEffect(() => {
 		const fetchTime = async () => {
-			const R = await fetch(`/api/${testID}/time`);
-			const data = await R.json();
-			setTime(data * 60 * 1000);
+			setTime(timeT * 60 * 1000);
 		};
 		fetchTime();
 	}, []);
-	
-	const stop=()=>{
-		handleExit();
-	}
 	return (
 		<div>
 			{time ? (
@@ -27,7 +21,7 @@ export default function Timer1({ testID, handleExit }) {
 						checkpoints={[
 							{
 								time: 0,
-								callback: () => {stop()},
+								callback: () => handleEndTest(),
 							},
 						]}
 					>

@@ -33,7 +33,6 @@ export default function AlertDialogSlide({
 		setOpen(false);
 	};
     React.useEffect(()=>{
-        // console.log(testData)
         setPublic(!testData.isPublic)
     },[testData])
 	const [loading, setLoading] = React.useState(false);

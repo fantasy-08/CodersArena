@@ -15,6 +15,8 @@ import NBKICON from "@material-ui/icons/BookmarkBorder";
 import Timer from "../Components/TestPage/Timer";
 import Exit from "../Components/TestPage/EndTestDialog";
 import { useHistory } from "react-router-dom";
+import Loading from '../Components/Loading';
+
 function Test() {
 	const history = useHistory();
 
@@ -29,7 +31,6 @@ function Test() {
 	React.useEffect(() => {
 		const getIncFight = async () => {
 			const token = state.token;
-			console.log(state);
 			const req = await fetch(`/api/${testID}/giveTest`, {
 				method: "POST",
 				headers: {
@@ -85,10 +86,8 @@ function Test() {
 				const result=await request.json();
 				if(result.error)
 				{
-					console.log("error submitting result")
 					return null;
 				}
-				console.log(result)
 				history.push(`/leaderboard/${testID}`);
 			}
 			submitTest();
@@ -99,6 +98,13 @@ function Test() {
 	return (
 		<>
 			<Container>
+				{!data ? (
+					<>
+						<Loading />
+					</>
+				) : (
+					<></>
+				)}
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={6}>
 						<Typography
@@ -108,13 +114,19 @@ function Test() {
 							align="center"
 							style={{ paddingTop: ".5em" }}
 						>
-							{data && data.name ?data.name:""}
+							{data && data.name ? data.name : ""}
 						</Typography>
 					</Grid>
-					<Grid item xs={12} md={6}>
-						<Exit handleExit={handleExit} />
-					</Grid>
-					<Grid item xs={3}>
+					{data ? (
+						<>
+							<Grid item xs={12} md={6}>
+								<Exit handleExit={handleExit} />
+							</Grid>
+						</>
+					) : (
+						<></>
+					)}
+					<Grid item xs={12} md={3}>
 						{data ? (
 							<>
 								{data.map((ques) => {
@@ -163,7 +175,7 @@ function Test() {
 							<></>
 						)}
 					</Grid>
-					<Grid item xs={9}>
+					<Grid item xs={12} md={9}>
 						{present ? (
 							<>
 								<Card

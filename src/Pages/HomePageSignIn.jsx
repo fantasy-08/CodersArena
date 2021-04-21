@@ -45,13 +45,7 @@ function HomePageSignIn() {
 						/>
 					</Grid>
 				</Grid>
-				<Typography
-					variant="h6"
-					align="center"
-					style={{ paddingTop: ".5em", paddingBottom: ".5em" }}
-				>
-					<b>OPEN</b> TESTS
-				</Typography>
+				
 				<PublicTest/>
 			</Container>
 		</>

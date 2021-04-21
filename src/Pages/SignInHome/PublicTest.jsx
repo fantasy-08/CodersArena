@@ -1,45 +1,64 @@
-import React,{useState,useEffect} from 'react'
-import {Grid,Card,CardActions,CardContent,Button,Typography} from '@material-ui/core'
-import MuiAlert from '@material-ui/lab/Alert';
+import React, { useState, useEffect } from "react";
+import {
+	Grid,
+	Card,
+	CardActions,
+	CardContent,
+	Button,
+	Typography,
+} from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import { useHistory } from "react-router-dom";
+import LoopIcon from "@material-ui/icons/Loop";
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 function PublicTest() {
-    const [testDetail,setTestDetail]=useState();
-    const [load,setLoad]=useState(false);
-    const [error, setError] = useState();
+	const [testDetail, setTestDetail] = useState();
+	const [load, setLoad] = useState(false);
+	const [error, setError] = useState();
 
-    let history=useHistory();
+	let history = useHistory();
 
-    useEffect(() => {
-        const getPublicTest=async()=>{
-            setLoad(true);
-            const res=await fetch('/api/public/test');
-            const data=await res.json()
-            setLoad(false)
+	useEffect(() => {
+		const getPublicTest = async () => {
+			setLoad(true);
+			const res = await fetch("/api/public/test");
+			const data = await res.json();
+			setLoad(false);
 
-            if(data.message){
-                setError()
-                setTestDetail(data.message)
-            }
-            else{
-                setError(data.error)
-            }
-        }
-        getPublicTest();
-    }, [])
+			if (data.message) {
+				setError();
+				setTestDetail(data.message);
+			} else {
+				setError(data.error);
+			}
+		};
+		getPublicTest();
+	}, []);
 
-    const handleClick=(test)=>{
-        history.push(`/test/${test.joiningID}`)
-    }
-    return (
+	const handleClick = (test) => {
+		history.push(`/test/${test.joiningID}`);
+	};
+	return (
 		<>
 			{error ? <Alert severity="error">{error}</Alert> : <></>}
 			{load ? (
-				<></>
+				<>
+					<br />
+					<div style={{ textAlign: "center" }}>
+						<LoopIcon />
+					</div>
+				</>
 			) : testDetail ? (
 				<>
+					<Typography
+						variant="h6"
+						align="center"
+						style={{ paddingTop: ".5em", paddingBottom: ".5em" }}
+					>
+						<b>OPEN</b> TESTS
+					</Typography>
 					<Grid
 						container
 						spacing={2}
@@ -101,4 +120,4 @@ function PublicTest() {
 	);
 }
 
-export default PublicTest
+export default PublicTest;

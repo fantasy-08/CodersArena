@@ -136,16 +136,23 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 		>
 			{state.user !== "" ? (
 				<>
-					<MenuItem>
-						<IconButton
-							aria-label="show 11 new notifications"
-							color="inherit"
-							onClick={handleEndTest}
-						>
-							<ExitToAppIcon />
-						</IconButton>
-						<p>End Test</p>
-					</MenuItem>
+					{state.joinID !== "" && state.joinID !== "finding" ? (
+						<>
+							<MenuItem>
+								<IconButton
+									aria-label="show 11 new notifications"
+									color="inherit"
+									onClick={handleEndTest}
+								>
+									<ExitToAppIcon />
+								</IconButton>
+								<p>End Test</p>
+							</MenuItem>
+						</>
+					) : (
+						<></>
+					)}
+
 					<MenuItem onClick={handleProfileMenuOpen}>
 						<IconButton
 							aria-label="account of current user"
@@ -200,7 +207,7 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 		<div className={classes.grow}>
 			<AppBar position="static">
 				<Toolbar>
-					<CodeIcon style={{ fontSize: "2em" }} />
+					<CodeIcon style={{ fontSize: "2em" }} onClick={()=>{history.push("/");}}/>
 					<Typography className={classes.title} variant="h6" noWrap onClick={()=>{
 						history.push('/')
 					}}>

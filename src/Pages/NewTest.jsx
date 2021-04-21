@@ -164,7 +164,7 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 				testData.questions.length > 0 ? (
 					<>
 						<Grid container spacing={2}>
-							<Grid item xs={3}>
+							<Grid item xs={12} md={3}>
 								<>
 									{testData.questions.map((ques, index) => {
 										return (
@@ -212,7 +212,7 @@ const Content = ({ testID, testData, token, setUpdate, setTestID }) => {
 									/>
 								</>
 							</Grid>
-							<Grid item xs={9}>
+							<Grid item xs={12} md={9}>
 								{select ? (
 									<>
 										<Card
