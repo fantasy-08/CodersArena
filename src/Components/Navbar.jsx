@@ -10,7 +10,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { InfoContext } from "../App";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import CodeIcon from "@material-ui/icons/Code";
 import TimerIcon from "@material-ui/icons/Timer";
 import Timer from "react-compound-timer";
@@ -115,10 +115,24 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 			<MenuItem disabled onClick={handleMenuClose}>
 				Welcome {state.user.name}
 			</MenuItem>
+			<MenuItem
+				onClick={() => {
+					history.push("/admin");
+				}}
+			>
+				Admin Control
+			</MenuItem>
 			<MenuItem onClick={handleMenuClose}>
 				{state.joinID
 					? `Join ID is ${state.joinID}`
 					: "Find Fight to get joining info"}
+			</MenuItem>
+			<MenuItem
+				onClick={() => {
+					history.push("/about");
+				}}
+			>
+				About Us
 			</MenuItem>
 		</Menu>
 	);
@@ -208,6 +222,7 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 			<AppBar position="static">
 				<Toolbar>
 					<CodeIcon style={{ fontSize: "2em" }} onClick={()=>{history.push("/");}}/>
+					
 					<Typography className={classes.title} variant="h6" noWrap onClick={()=>{
 						history.push('/')
 					}}>

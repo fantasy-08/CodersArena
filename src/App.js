@@ -9,12 +9,14 @@ import PrivateRoute from './Components/PrivateRoute';
 import LoginRoute from "./Components/LoginRoute";
 import LoginRoute2 from "./Components/HomePage/LoginRoute";
 import SessionExpired from './Pages/SessionExpired';
+import Admin from "./Pages/Admin";
 import EndTest from './Pages/EndFight';
 import Test from "./Pages/Test";
 import EndTestMCQ from "./Pages/EndTest";
 import NavBar from "./Components/Navbar";
 import Footer from './Components/Footer'
 import ReactNotification from "react-notifications-component";
+import ABT from './Pages/AboutBoringCoder';
 import "react-notifications-component/dist/theme.css";
 import {
 	orange,
@@ -72,18 +74,31 @@ function App() {
 						<ReactNotification />
 						<NavBar handleThemeChange={handleThemeChange} />
 						<Route exact path="/combat" component={JoinPage} />
+						<LoginRoute
+							state={state}
+							exact
+							path="/admin"
+						>
+							<Admin />
+						</LoginRoute>
+						<Route exact path="/about" component={ABT} />
 						<PrivateRoute exact path="/fight">
 							<QuestionBox />
 						</PrivateRoute>
-						<LoginRoute exact path="/newTest">
+						<LoginRoute state={state} exact path="/newTest">
 							<NewTest />
 						</LoginRoute>
-						<LoginRoute exact path="/test/:testID">
+						<LoginRoute state={state} exact path="/test/:testID">
 							<Test />
 						</LoginRoute>
-						<LoginRoute exact path="/leaderboard/:testID">
+						<LoginRoute
+							state={state}
+							exact
+							path="/leaderboard/:testID"
+						>
 							<EndTestMCQ />
 						</LoginRoute>
+
 						<LoginRoute2 exact state={state} path="/"></LoginRoute2>
 						<PrivateRoute exact path="/end">
 							<EndTest />

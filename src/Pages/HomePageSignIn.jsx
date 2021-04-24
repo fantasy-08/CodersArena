@@ -12,7 +12,7 @@ function HomePageSignIn() {
 				align="center"
 				style={{ paddingTop: "1em", paddingBottom: "1em" }}
 			>
-				<b>CHOOSE</b> FROM SERVICES WE OFFER
+				{/* <b>CHOOSE</b> FROM SERVICES WE OFFER */}
 			</Typography>
 
 			<Container>

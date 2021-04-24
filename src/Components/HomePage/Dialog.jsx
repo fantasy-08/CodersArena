@@ -7,11 +7,15 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { useHistory } from "react-router-dom";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { InfoContext } from "../../App";
+import MuiAlert from "@material-ui/lab/Alert";
 
 export default function FormDialog() {
 	const [open, setOpen] = React.useState(false);
 	const [loading, setLoading] = React.useState(0);
+	const { state } = React.useContext(InfoContext);
+	const [error, setError] = React.useState();
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -20,6 +24,23 @@ export default function FormDialog() {
 		setOpen(false);
 	};
 	const [data, setData] = React.useState("");
+	const isPresent = async (testID) => {
+		setError();
+		const token = state.token;
+		const req = await fetch(`/api/${testID}/giveTest`, {
+			method: "POST",
+			headers: {
+				authorization: `Bearer ${token}`,
+			},
+		});
+		const d = await req.json();
+
+		if (d.error && d.error !== "User already attempted the test") {
+			setError(d.error);
+			return false;
+		}
+		else return true;
+	};
 	let history = useHistory();
 	return (
 		<div>
@@ -31,6 +52,15 @@ export default function FormDialog() {
 				onClose={handleClose}
 				aria-labelledby="form-dialog-title"
 			>
+				{error ? (
+					<>
+						<MuiAlert style={{ margin: "0.5em" }} severity="error">
+							{error}
+						</MuiAlert>
+					</>
+				) : (
+					<></>
+				)}
 				<DialogTitle id="form-dialog-title" align="center">
 					Test ID
 				</DialogTitle>
@@ -73,11 +103,11 @@ export default function FormDialog() {
 						Cancel
 					</Button>
 					<Button
-						onClick={() => {
+						onClick={async () => {
 							setLoading(1);
-							history.push(`/test/${data}`);
-							setLoading(0);
-							handleClose();
+							var valid =await isPresent(data);
+							if (valid) history.push(`/test/${data}`);
+							else setLoading(0);
 						}}
 						variant="outlined"
 						color="primary"
