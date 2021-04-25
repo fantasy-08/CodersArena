@@ -35,6 +35,7 @@ export default function FormDialog({design}) {
 		const signINF = async () => {
 			if (signin) {
 				setWorking(true)
+				setError({ color: "", msg: "" });
 				const param = {
 					email: prop.email,
 					password: prop.password,
@@ -72,6 +73,7 @@ export default function FormDialog({design}) {
 					email: prop.email,
 					password: prop.password,
 				};
+				setError({ color: "", msg: "" });
 				const res = await fetch("/signup", {
 					method: "POST",
 					headers: {
@@ -101,70 +103,82 @@ export default function FormDialog({design}) {
 	};
 	return (
 		<div>
-			{
-				design==="white"?
+			{design === "white" ? (
 				<Button
 					color="primary"
-					onClick={handleClickOpen}			
+					onClick={handleClickOpen}
 					endIcon={<LockOpenTwoToneIcon />}
-					style={{color:"white"}}
+					style={{ color: "white" }}
 				>
 					Sign In
-				</Button>:
+				</Button>
+			) : (
 				<Button
 					color="primary"
-					onClick={handleClickOpen}			
+					onClick={handleClickOpen}
 					endIcon={<LockOpenTwoToneIcon />}
 				>
 					Sign In
 				</Button>
-			}			
+			)}
+
 			<Dialog
 				open={open}
 				onClose={handleClose}
 				aria-labelledby="form-dialog-title"
 			>
-				<DialogTitle id="form-dialog-title">
-					{signin ? "Sign In " : "Sign Up "}
-					<LockOpenTwoToneIcon />
-				</DialogTitle>
+				<div style={{ textAlign: "center" }}>
+					<DialogTitle id="form-dialog-title">
+						<LockOpenTwoToneIcon /><br/>
+						{signin ? "Sign In " : "Sign Up "}
+					</DialogTitle>
+				</div>
 				<DialogContent>
 					{error.msg !== "" ? (
-						<Alert severity={error.color}>{error.msg}</Alert>
+						<><Alert severity={error.color}>{error.msg}</Alert><br /></>
 					) : (
 						<></>
 					)}
-					<DialogContentText>
-						{signin ? "Log In Form" : "Sign Up Form"}
+					
+					<DialogContentText
+						style={{ color: "black", textAlign: "center" }}
+					>
+						<b>{signin ? "Log In Form" : "Sign Up Form"}</b>
 					</DialogContentText>
 					{signin ? (
 						<></>
 					) : (
-						<TextField
-							autoFocus
-							margin="dense"
-							name="name"
-							value={prop.name}
-							label="Name"
-							type="text"
-							fullWidth
-							onChange={(e) => {
-								setProp((prev) => {
-									return {
-										...prev,
-										[e.target.name]: e.target.value,
-									};
-								});
-							}}
-							variant="outlined"
-						/>
+						<>
+							<label>Name</label>
+							<TextField
+								autoFocus
+								margin="dense"
+								name="name"
+								value={prop.name}
+								placeholder="Name"
+								type="text"
+								style={{ margin: ".5em 0" }}
+								fullWidth
+								onChange={(e) => {
+									setProp((prev) => {
+										return {
+											...prev,
+											[e.target.name]: e.target.value,
+										};
+									});
+								}}
+								variant="outlined"
+							/>
+						</>
 					)}
+					<label>Email Address</label>
 					<TextField
 						autoFocus
 						margin="dense"
 						name="email"
 						value={prop.email}
-						label="Email Address"
+						style={{ margin: ".5em 0" }}
+						placeholder="Email Address"
 						type="email"
 						fullWidth
 						onChange={(e) => {
@@ -177,11 +191,13 @@ export default function FormDialog({design}) {
 						}}
 						variant="outlined"
 					/>
+					<label>Password</label>
 					<TextField
 						autoFocus
 						margin="dense"
 						name="password"
 						value={prop.password}
+						style={{ margin: ".5em 0" }}
 						onChange={(e) => {
 							setProp((prev) => {
 								return {
@@ -190,7 +206,7 @@ export default function FormDialog({design}) {
 								};
 							});
 						}}
-						label="Password"
+						placeholder="Password"
 						type="password"
 						fullWidth
 						variant="outlined"

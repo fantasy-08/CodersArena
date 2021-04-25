@@ -1,0 +1,31 @@
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+
+.fixed-server-timer {
+    position: fixed;
+    right: 10px;
+    bottom: -40px;
+    width: 160px;
+    height: 80px;
+    margin: 0;
+    padding: 20px 0;
+    background-image: url('//img.atcoder.jp/assets/contest/digitalclock.png');
+    text-align: center;
+    line-height: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    z-index: 50;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.fixed-server-timer:hover {
+
+    opacity: 0.1;
+}

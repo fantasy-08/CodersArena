@@ -11,6 +11,7 @@ import useChat from "../Components/Socket";
 import { store } from "react-notifications-component";
 import { useHistory } from "react-router-dom";
 import { InfoContext } from "../App";
+// import Timer from '../Components/CoderFight/Timer'
 
 const initial_state = {
 	title: "",
@@ -29,6 +30,10 @@ function QuestionPage({ qID, joinID }) {
 	const { messages, sendMessage } = useChat(joinID);
 	const history = useHistory();
 	const { state, dispatch } = useContext(InfoContext);
+	const [testTime,setTestTime]=useState({present:false,time:0});
+	const handleEndTest=()=>{
+		console.log("over")
+	}
 	useEffect(() => {
 		const getQuestion = async (qID) => {
 			const response = await fetch(`/api/question/${qID}`);
@@ -47,10 +52,31 @@ function QuestionPage({ qID, joinID }) {
 						onScreen: true,
 					},
 				});
-			} else setQuestion(data);
+			} else {
+				setQuestion(data);
+			}
 		};
 		getQuestion(qID);
 	}, []);
+
+	// useEffect(() => {
+	// 	if (state.createdOn === "") {
+	// 		setTestTime(prev=>{return {...prev,present:false}});
+	// 		return null;
+	// 	}
+
+	// 	var T = state.createdOn;
+	// 	var t1 = Date.parse(T);
+	// 	var t2 = Date.now();
+	// 	var dif = t2 - t1;
+
+	// 	dif = dif / 60000;
+
+	// 	if (dif < 32) {
+	// 		setTestTime(prev=>{return {present:true,time:dif}});
+	// 	}
+
+	// }, [state]);
 
 	useEffect(() => {
 		if (messages.length === 0) return null;
@@ -106,21 +132,11 @@ function QuestionPage({ qID, joinID }) {
 					<Loading />
 				</>
 			)}
-
-			{
-			/* <div className="messages-container">
-				<ol className="messages-list">
-					{messages.map((message, i) => (
-						!message.ownedByCurrentUser?
-						<li key={i}>
-							{message.body}
-						</li>:
-						<></>
-						))
-					}
-				</ol>
-			</div> */
-			}
+			{/* {testTime.present ? (
+				<Timer timeT={testTime.time} handleEndTest={handleEndTest} />
+			) : (
+				<></>
+			)} */}
 		</>
 	);
 }

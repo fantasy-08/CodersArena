@@ -10,14 +10,13 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { InfoContext } from "../App";
-import { useHistory } from "react-router-dom";
+import {  useHistory } from "react-router-dom";
 import CodeIcon from "@material-ui/icons/Code";
 import TimerIcon from "@material-ui/icons/Timer";
 import Timer from "react-compound-timer";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import FormDialog from "./SignIn";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
-
 const useStyles = makeStyles((theme) => ({
 	grow: {
 		flexGrow: 1,
@@ -101,6 +100,7 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 	const handleEndTest = () => {
 		setTime(false);
 		history.push("/end");
+		handleMobileMenuClose();
 	};
 	const menuId = "primary-search-account-menu";
 	const renderMenu = (
@@ -116,10 +116,26 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 			<MenuItem disabled onClick={handleMenuClose}>
 				Welcome {state.user.name}
 			</MenuItem>
+			<MenuItem
+				onClick={() => {
+					history.push("/admin");
+					handleMenuClose();
+				}}
+			>
+				Admin Control
+			</MenuItem>
 			<MenuItem onClick={handleMenuClose}>
 				{state.joinID
 					? `Join ID is ${state.joinID}`
 					: "Find Fight to get joining info"}
+			</MenuItem>
+			<MenuItem
+				onClick={() => {
+					history.push("/about");
+					handleMenuClose();
+				}}
+			>
+				About Us
 			</MenuItem>
 		</Menu>
 	);
@@ -137,16 +153,23 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 		>
 			{state.user !== "" ? (
 				<>
-					<MenuItem>
-						<IconButton
-							aria-label="show 11 new notifications"
-							color="inherit"
-							onClick={handleEndTest}
-						>
-							<ExitToAppIcon />
-						</IconButton>
-						<p>End Test</p>
-					</MenuItem>
+					{state.joinID !== "" && state.joinID !== "finding" ? (
+						<>
+							<MenuItem>
+								<IconButton
+									aria-label="show 11 new notifications"
+									color="inherit"
+									onClick={handleEndTest}
+								>
+									<ExitToAppIcon />
+								</IconButton>
+								<p>End Test</p>
+							</MenuItem>
+						</>
+					) : (
+						<></>
+					)}
+
 					<MenuItem onClick={handleProfileMenuOpen}>
 						<IconButton
 							aria-label="account of current user"
@@ -201,8 +224,11 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 		<div className={classes.grow}>
 			<AppBar position="static">
 				<Toolbar>
-					<CodeIcon style={{ fontSize: "2em" }} />
-					<Typography className={classes.title} variant="h6" noWrap>
+					<CodeIcon style={{ fontSize: "2em" }} onClick={()=>{history.push("/");}}/>
+					
+					<Typography className={classes.title} variant="h6" noWrap onClick={()=>{
+						history.push('/')
+					}}>
 						Boring Coder
 					</Typography>
 					<IconButton
