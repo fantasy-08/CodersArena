@@ -286,7 +286,7 @@ function Admin() {
 			) : (
 				<></>
 			)}
-			{d1 ? (
+			{(d1 && d2)||(err) ? (
 				<>
 					<Container>
 						<Grid container spacing={2}>

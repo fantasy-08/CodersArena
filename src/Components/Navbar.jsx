@@ -10,7 +10,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { InfoContext } from "../App";
-import { Redirect, useHistory } from "react-router-dom";
+import {  useHistory } from "react-router-dom";
 import CodeIcon from "@material-ui/icons/Code";
 import TimerIcon from "@material-ui/icons/Timer";
 import Timer from "react-compound-timer";
@@ -100,6 +100,7 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 	const handleEndTest = () => {
 		setTime(false);
 		history.push("/end");
+		handleMobileMenuClose();
 	};
 	const menuId = "primary-search-account-menu";
 	const renderMenu = (
@@ -118,6 +119,7 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 			<MenuItem
 				onClick={() => {
 					history.push("/admin");
+					handleMenuClose();
 				}}
 			>
 				Admin Control
@@ -130,6 +132,7 @@ export default function PrimarySearchAppBar({ handleThemeChange }) {
 			<MenuItem
 				onClick={() => {
 					history.push("/about");
+					handleMenuClose();
 				}}
 			>
 				About Us

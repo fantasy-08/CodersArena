@@ -2,7 +2,7 @@ import React from 'react'
 import { InfoContext } from "../App";
 import { Card, CardContent, Typography, Container } from "@material-ui/core";
 import {useParams} from 'react-router-dom';
-
+import Loading from "../Components/Loading";
 function EndTest({}) {
     const { state } = React.useContext(InfoContext);
 
