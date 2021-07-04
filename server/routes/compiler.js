@@ -2,9 +2,46 @@ const express = require("express");
 const router = express.Router();
 const mongoose=require('mongoose')
 const fetch = require("node-fetch");
-const { COMPILER }=require('../keys/keys');
+const { _COMPILER,_clientId,_clientSecret }=require('../keys/keys');
 const Problem = mongoose.model("Problem");
 
+const languageMap = {
+    "5": {
+        "language":"python3",
+        "versionIndex":"0"
+    },
+    "7": {
+        "language":"cpp",
+        "versionIndex":"4"
+    },
+    "6": {
+        "language":"c",
+        "versionIndex":"4"
+    },
+    "4": {
+        "language":"java",
+        "versionIndex":"3"
+    },
+    "1": {
+        "language":"csharp",
+        "versionIndex":"3"
+    },
+    "8": {
+        "language":"php",
+        "versionIndex":"3"
+    },
+    "12": {
+        "language":"ruby",
+        "versionIndex":"3"
+    },
+    "17": {
+        "language":"nodejs",
+        "versionIndex":"3"
+    },
+}
+const clientId = process.env.clientId || _clientId
+const COMPILER = process.env.COMPILER || _COMPILER
+const clientSecret=process.env.clientSecret || _clientSecret
 router.post('/api/compile',(req,res)=>{
     const {
         LanguageChoice,
@@ -13,16 +50,17 @@ router.post('/api/compile',(req,res)=>{
         CompilerArgs
         } = req.body;
     const reqBody={
-        LanguageChoice,
-        Program,
-        Input,
-        CompilerArgs
-    }    
+        ...languageMap[LanguageChoice],
+        "script":Program,
+        "stdin":Input,
+        clientId:clientId,
+        clientSecret: clientSecret,
+    }
+    
     const request=async()=>{
         fetch(COMPILER, {
 			method: "POST",
             headers: {
-            'Accept': 'application/json',
             'Content-Type': 'application/json'
             },
 			body: JSON.stringify(reqBody),
@@ -52,12 +90,13 @@ router.post('/api/result/:qID/:problemNo',(req,res)=>{
     .then(question=>{
         const { LanguageChoice, Program,CompilerArgs } = req.body;
 
-        const reqBody = {
-			LanguageChoice,
-			Program,
-			Input: question.input[problemNo],
-			CompilerArgs,
-		};
+        const reqBody={
+            ...languageMap[LanguageChoice],
+            "script":Program,
+            "stdin":Input,
+            clientId:clientId,
+            clientSecret: clientSecret,
+        }  
 
         const request = async () => {
             fetch(COMPILER, {
@@ -71,17 +110,17 @@ router.post('/api/result/:qID/:problemNo',(req,res)=>{
                 .then((data) => data.json())
                 .then((data) => {
                     
-                    if (data.Errors == "Too many requests...")
+                    if (data.error == "Too many requests...")
                         return res.status(200).json({
 							message: "Server Error",
 						});
 
-                    if (data.Errors)
+                    if (data.error)
                         return res.status(200).json({
                             message: "RE",
                         });
 
-                    const output = data.Result;
+                    const output = data.output;
                     const answer = question.output[problemNo];
                     
                     if(output===answer)
