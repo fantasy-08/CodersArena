@@ -55,6 +55,10 @@ const testSchema = new Schema({
 	time:{
 		type:Number,
 		default:30
+	},
+	isPublic:{
+		type:Boolean,
+		default:false
 	}
 });
 

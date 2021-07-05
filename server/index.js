@@ -7,16 +7,18 @@ const io = require("socket.io")(server, {
 	},
 });
 
-const PORT=process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 const mongoose = require("mongoose");
-// const { MONGOURI } = require("./keys/keys.js");
+const { MONGOURI } = require("./keys/keys.js");
 const cors = require("cors");
 
 app.use(cors());
 app.use(express.json());
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
+const mONGOURI=process.env.MONGOURI || MONGOURI;
+
 io.on("connection", (socket) => {
 	// Join a conversation
 	const { roomId } = socket.handshake.query;
@@ -36,14 +38,23 @@ io.on("connection", (socket) => {
 //DB-Schema
 require("./models/question");
 require("./models/coder");
+require("./models/user");
+require("./models/mcqQuestion");
+require("./models/test");
+require("./models/publicTest");
 
 //Routes
 app.use(require("./routes/coder"));
 app.use(require("./routes/compiler"));
 app.use(require("./routes/problem"));
+app.use(require("./routes/auth"));
+app.use(require("./routes/mcqQuestion"));
+app.use(require("./routes/test"));
+app.use(require("./routes/dashboard"));
+
 
 //DB Connection
-mongoose.connect(process.env.MONGOURI, {
+mongoose.connect(mONGOURI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 });
@@ -56,7 +67,8 @@ mongoose.connection.on("error", () => {
 	console.log("error connecting to Data Base");
 });
 
-app.use(express.static("client/build"));
+// if(process.env.NODE_EV==="production")
+app.use(express.static('client/build'))
 
 server.listen(PORT, () => {
 	console.log(`Listening and Running on port ${PORT}`);

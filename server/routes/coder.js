@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const Coder = mongoose.model("Coder");
 const Problem=mongoose.model("Problem");
+const requiredLogin = require("../middleware/requireLogin");
 
 router.post('/api/user/:joinID',(req,res)=>{
     const joinID=req.params.joinID;

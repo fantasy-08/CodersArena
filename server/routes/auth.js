@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../keys/keys");
 const requiredLogin = require("../middleware/requireLogin");
+const jwt_sec=process.env.JWT_SECRET || JWT_SECRET;
 
 router.get("/protected", requiredLogin, (req, res) => {
 	console.log(req.user);
@@ -69,7 +70,7 @@ router.post("/signin", (req, res) => {
 				});
 			}
 
-			const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
+			const token = jwt.sign({ _id: savedUser._id }, jwt_sec);
 			return res.json({ token, user: {
                 fightWon:savedUser.fightWon,
 				fightFought:savedUser.fightFought,

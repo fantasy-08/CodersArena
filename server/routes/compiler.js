@@ -67,7 +67,10 @@ router.post('/api/compile',(req,res)=>{
 		})
 			.then((data) => data.json())
 			.then((data) => {
-				return res.status(200).json(data);
+				if (data.error) {
+					return res.status(200).json({"Errors":data.error});	
+				}
+				return res.status(200).json({"Result":data.output, "Errors":null});
 			})
 			.catch((err) => {
 				console.log(err);
@@ -93,7 +96,7 @@ router.post('/api/result/:qID/:problemNo',(req,res)=>{
         const reqBody={
             ...languageMap[LanguageChoice],
             "script":Program,
-            "stdin":Input,
+            "stdin":question.input[problemNo],
             clientId:clientId,
             clientSecret: clientSecret,
         }  

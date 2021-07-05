@@ -44,6 +44,13 @@ function HomePageSignIn() {
 							img="https://visme.co/blog/wp-content/uploads/2020/03/animation-software-header.gif"
 						/>
 					</Grid>
+					<Grid item xs={12} md={3}>
+						<Card
+							loc="/playground"
+							title="Playground"
+							img="https://i.gifer.com/1Yl.gif"
+						/>
+					</Grid>
 				</Grid>
 				
 				<PublicTest/>
