@@ -19,6 +19,7 @@ import ReactNotification from "react-notifications-component";
 import ABT from "./Pages/AboutBoringCoder";
 import PlaygroundHome from "./Pages/playground/home";
 import PlaygroundWeb from "./Pages/playground/Web";
+import PlaygroundCoder from "./Pages/playground/Coder";
 import "react-notifications-component/dist/theme.css";
 import {
   orange,
@@ -88,6 +89,9 @@ function App() {
             </LoginRoute>
             <LoginRoute state={state} exact path="/playground/web">
               <PlaygroundWeb />
+            </LoginRoute>
+            <LoginRoute state={state} exact path="/playground/compiler">
+              <PlaygroundCoder />
             </LoginRoute>
             <LoginRoute state={state} exact path="/playground">
               <PlaygroundHome />

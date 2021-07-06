@@ -21,7 +21,7 @@ function Output({ code }) {
 
   return (
     <>
-      <iframe id="iFrame" title="Output" style={{width:'160vh',height:'70vh'}}></iframe>
+      <iframe id="iFrame" title="Output" style={{width:'160vh',height:'70vh'}} sandbox ></iframe>
     </>
   );
 }
