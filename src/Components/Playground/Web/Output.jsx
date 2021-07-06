@@ -8,12 +8,12 @@ function Output({ code }) {
     const jsTextArea = code["js"];
     iFrame.open();
     iFrame.writeln(
-      htmlTextArea.value +
+      htmlTextArea +
         "<style>" +
-        cssTextArea.value +
+        cssTextArea +
         "</style>" +
         "<script>" +
-        jsTextArea.value +
+        jsTextArea +
         "</script>"
     );
     iFrame.close();
@@ -21,7 +21,7 @@ function Output({ code }) {
 
   return (
     <>
-      <iframe id="iFrame" title="Output"></iframe>
+      <iframe id="iFrame" title="Output" style={{width:'160vh',height:'70vh'}}></iframe>
     </>
   );
 }

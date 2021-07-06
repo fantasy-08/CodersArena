@@ -9,6 +9,7 @@ import './Web.css'
 function Web() {
     const [code, setCode] = React.useState({ 'html': Playground["html"], 'css': '', 'js': Playground["javascript"] })
     const [run, setRun] = React.useState({ 'html': Playground["html"], 'css': '', 'js': Playground["javascript"] })
+    const [value, setValue] = React.useState(0);
     return (
         <>
             <Grid alignItems="center" justify="center">
@@ -18,13 +19,13 @@ function Web() {
                         color="primary"
                         endIcon={<PlayCircleOutlineIcon />}
                         id="run"
-                        onClick={()=>{setRun(code)}}
+                        onClick={() => { setRun(code); setValue(3) }}
                     >
                         Run
                     </Button>
                 </Grid>
                 <Grid item xs={12} md={12}>
-                    <MyTab code={code} setCode={setCode} run={run}/>
+                    <MyTab code={code} setCode={setCode} run={run} value={value} setValue={setValue} />
                 </Grid>
             </Grid>
         </>
