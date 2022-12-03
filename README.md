@@ -1,4 +1,4 @@
-# Boring Coder ![BoringCoder Logo](https://drive.google.com/file/d/1sE4s-nSp4N2ZEy2G1i-Zm5cKhywG1e00/view)
+# Boring Coder ![BoringCoder Logo](https://user-images.githubusercontent.com/59399447/205442970-d8e75c37-0e03-4be2-a824-13a6b8213db6.png)
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](http://boringcoder.herokuapp.com/)
 
